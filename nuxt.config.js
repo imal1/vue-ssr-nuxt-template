@@ -1,4 +1,6 @@
 export default {
+  srcDir: 'src/',
+
   head: {
     // Global page headers: https://go.nuxtjs.dev/config-head
     title: 'Mandala.web.template',
