@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 export const state = () => ({
   hosts: [],
 })
@@ -39,8 +38,13 @@ export const actions = {
       console.error(error)
     }
   },
-  async fetchRoutes(a, context) {
-    await console.log(a)
+  async fetchRoutes(_, { $http, app }) {
+    try {
+      const { data } = await $http.$get('/routes.json')
+      console.log(data)
+    } catch (error) {
+      console.error(error)
+    }
   },
   async nuxtServerInit({ dispatch }, context) {
     // https://zh.nuxtjs.org/docs/2.x/directory-structure/store#the-nuxtserverinit-action
