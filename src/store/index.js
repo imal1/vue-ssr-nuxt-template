@@ -35,15 +35,15 @@ export const actions = {
 
       $http.setBaseURL(data)
     } catch (error) {
-      console.error(error)
+      throw new Error(error)
     }
   },
   async fetchRoutes(_, { $http, app }) {
     try {
       const { data } = await $http.$get('/routes.json')
-      console.log(data)
+      app.router.addRoutes(data)
     } catch (error) {
-      console.error(error)
+      throw new Error(error)
     }
   },
   async nuxtServerInit({ dispatch }, context) {
