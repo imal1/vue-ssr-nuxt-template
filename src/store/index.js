@@ -1,14 +1,14 @@
-export const state = () => ({
+const state = () => ({
   hosts: [],
 })
 
-export const mutations = {
+const mutations = {
   setHosts(state, hosts) {
     state.hosts = hosts
   },
 }
 
-export const actions = {
+const actions = {
   async fetchHost({ commit, state }, { $http }) {
     try {
       const { code, msg, data } = await fetch(
@@ -41,7 +41,9 @@ export const actions = {
   async fetchRoutes(_, { $http, app }) {
     try {
       const { data } = await $http.$get('/routes.json')
-      app.router.addRoutes(data)
+      if (data?.length) {
+        data.forEach((route) => app.router.addRoute(route))
+      }
     } catch (error) {
       throw new Error(error)
     }
@@ -52,4 +54,10 @@ export const actions = {
 
     await dispatch('fetchRoutes', context)
   },
+}
+
+export default {
+  state,
+  mutations,
+  actions,
 }

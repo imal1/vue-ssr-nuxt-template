@@ -23,7 +23,7 @@ export default {
 
   plugins: [
     // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
-    { src: '@/plugins/element-ui', mode: 'server' },
+    { src: '@/plugins/element-ui' },
 
     { src: '@/plugins/mock' }, // http://mockjs.com
   ],
