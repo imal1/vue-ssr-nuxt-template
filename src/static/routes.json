@@ -3,8 +3,24 @@
   "msg": null,
   "data": [
     {
-      "name": "123",
-      "path": "/123/456"
+      "name": "IndexManagement",
+      "path": "/IndexManagement"
+    },
+    {
+      "name": "RuleManagement",
+      "path": "/RuleManagement"
+    },
+    {
+      "name": "BaseDataManagement",
+      "path": "/BaseDataManagement"
+    },
+    {
+      "name": "DataStatistics",
+      "path": "/DataStatistics"
+    },
+    {
+      "name": "TaskManagement",
+      "path": "/TaskManagement"
     }
   ]
 }

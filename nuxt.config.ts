@@ -28,7 +28,6 @@ const config: NuxtConfig = {
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
   plugins: [
-    { src: '@/plugins/composition-api' },
     { src: '@/plugins/element-ui' },
     { src: '@/plugins/mock' }, // http://mockjs.com
   ],
@@ -36,14 +35,19 @@ const config: NuxtConfig = {
   // Auto import components: https://go.nuxtjs.dev/config-components
   components: true,
 
+  generate: {
+    interval: 2000,
+  },
+
   // Modules for dev and build (recommended): https://go.nuxtjs.dev/config-modules
   buildModules: [
     '@nuxtjs/eslint-module', // https://go.nuxtjs.dev/eslint
     '@nuxt/typescript-build', // https://go.nuxtjs.dev/typescript
     '@nuxtjs/stylelint-module', // https://go.nuxtjs.dev/stylelint
     'nuxt-windicss', // https://windicss.org/integrations/nuxt.
-    'nuxt-vite', // https://vite.nuxtjs.org/
-    'nuxt-build-optimisations' // https://github.com/harlan-zw/nuxt-build-optimisations
+    // 'nuxt-vite', // https://vite.nuxtjs.org/
+    'nuxt-build-optimisations', // https://github.com/harlan-zw/nuxt-build-optimisations
+    '@nuxtjs/composition-api/module' // https://composition-api.nuxtjs.org
   ],
 
   // Modules: https://go.nuxtjs.dev/config-modules
@@ -73,15 +77,15 @@ const config: NuxtConfig = {
     }
   },
 
-  vite: {
-    ssr: true,
-    optimizeDeps: {
-      esbuildOptions: {
-        keepNames: true
-      },
-    },
-    plugins: [WindiCSS()]
-  },
+  // vite: {
+  //   ssr: true,
+  //   optimizeDeps: {
+  //     esbuildOptions: {
+  //       keepNames: true
+  //     },
+  //   },
+  //   plugins: [WindiCSS()]
+  // },
 
   i18n: {
     locales: ['zh', 'en'],

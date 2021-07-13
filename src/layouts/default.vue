@@ -1,17 +1,37 @@
 <template>
   <el-container>
-    <el-header></el-header>
+    <el-header>
+      <Nav :list="[]" />
+    </el-header>
     <Nuxt />
     <el-footer></el-footer>
   </el-container>
 </template>
 <script lang="ts">
-import { defineComponent } from '@vue/composition-api'
+import {
+  defineComponent,
+  useRouter,
+  useContext,
+  ref,
+  useStore
+} from '@nuxtjs/composition-api'
 
 export default defineComponent({
   setup() {
-
+    const { ssrContext } = useContext()
+    const router = useRouter()
+    const store = useStore()
+    let list: any = ref([])
+    if (ssrContext) {
+      list = router.getRoutes().map((route: any) => ({
+        ...route,
+        index: route.path,
+      }))
+    }
+    console.log(list, router.getRoutes())
+    return {
+      list,
+    }
   },
 })
 </script>
-
