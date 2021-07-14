@@ -3,23 +3,23 @@
   "msg": null,
   "data": [
     {
-      "name": "IndexManagement",
+      "name": "索引管理",
       "path": "/IndexManagement"
     },
     {
-      "name": "RuleManagement",
+      "name": "规则管理",
       "path": "/RuleManagement"
     },
     {
-      "name": "BaseDataManagement",
+      "name": "基础数据管理",
       "path": "/BaseDataManagement"
     },
     {
-      "name": "DataStatistics",
+      "name": "数据统计",
       "path": "/DataStatistics"
     },
     {
-      "name": "TaskManagement",
+      "name": "任务管理",
       "path": "/TaskManagement"
     }
   ]
