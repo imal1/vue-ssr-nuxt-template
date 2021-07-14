@@ -13,14 +13,14 @@ import {
   useRouter,
   useContext,
   ref,
-  useStore
+  // useStore
 } from '@nuxtjs/composition-api'
 
 export default defineComponent({
   setup() {
     const { ssrContext } = useContext()
     const router = useRouter()
-    const store = useStore()
+    // const store = useStore()
     let list: any = ref([])
     if (ssrContext) {
       list = router.getRoutes().map((route: any) => ({
@@ -28,7 +28,6 @@ export default defineComponent({
         index: route.path,
       }))
     }
-    console.log(list, router.getRoutes())
     return {
       list,
     }
