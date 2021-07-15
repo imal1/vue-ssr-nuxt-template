@@ -1,5 +1,5 @@
 import { NuxtConfig } from '@nuxt/types'
-import WindiCSS from 'vite-plugin-windicss'
+// import WindiCSS from 'vite-plugin-windicss'
 
 const config: NuxtConfig = {
   // Global page headers: https://go.nuxtjs.dev/config-head
