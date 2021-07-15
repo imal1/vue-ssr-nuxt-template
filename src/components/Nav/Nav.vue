@@ -4,12 +4,12 @@
  * @Author: imali
  * @Date: 2021-07-14 11:21:08
  * @LastEditors: imali
- * @LastEditTime: 2021-07-15 17:53:22
+ * @LastEditTime: 2021-07-15 17:57:18
 -->
 <template>
   <el-menu :ref="root" :router="router" mode="horizontal">
     <template v-for="(item, index) in menuList">
-      <el-menu-item :key="index" class="mr-8 pd-0" :index="item.index">
+      <el-menu-item :key="index" class="mr-8 p-0" :index="item.index">
         <template slot="title">
           <el-button>
             {{ item.name }}
