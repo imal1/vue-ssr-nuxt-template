@@ -41,13 +41,14 @@ const config: NuxtConfig = {
 
   // Modules for dev and build (recommended): https://go.nuxtjs.dev/config-modules
   buildModules: [
-    '@nuxtjs/eslint-module', // https://go.nuxtjs.dev/eslint
     '@nuxt/typescript-build', // https://go.nuxtjs.dev/typescript
+    '@nuxtjs/composition-api/module', // https://composition-api.nuxtjs.org,
+    '@nuxtjs/eslint-module', // https://go.nuxtjs.dev/eslint
     '@nuxtjs/stylelint-module', // https://go.nuxtjs.dev/stylelint
-    'nuxt-windicss', // https://windicss.org/integrations/nuxt.
-    // 'nuxt-vite', // https://vite.nuxtjs.org/
+    'nuxt-windicss', // https://windicss.org/integrations/nuxt
+    // 'nuxt-vite', // https://vite.nuxtjs.org
+    // 'nuxt-use-motion', // https://motion.vueuse.org
     'nuxt-build-optimisations', // https://github.com/harlan-zw/nuxt-build-optimisations
-    '@nuxtjs/composition-api/module' // https://composition-api.nuxtjs.org
   ],
 
   // Modules: https://go.nuxtjs.dev/config-modules
