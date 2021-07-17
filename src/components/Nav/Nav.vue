@@ -11,38 +11,49 @@
     <el-menu
       :ref="root"
       :router="router"
-      :default-active="defaultIndex"
+      :default-active="mainIndex"
       mode="horizontal"
-      @select="(index) => (defaultIndex = index)"
+      @select="doMainSelect"
     >
-      <template v-for="item in menuList">
+      <template v-for="item in mainList">
         <el-menu-item
-          :key="item.index"
-          class="mr-8 p-0"
-          :index="item.index"
+          :key="item.path"
+          :index="item.path"
           :route="item.route"
+          class="mr-8 p-0"
         >
           <template slot="title">
-            <el-button>
+            <el-button size="medium">
+              <i v-if="item.icon" :class="`el-icon el-icon-${item.icon}`"/>
               {{ item.name }}
             </el-button>
           </template>
         </el-menu-item>
       </template>
     </el-menu>
+    <el-tabs
+      v-if="
+        mainList &&
+        mainList.length &&
+        mainList.some((item) => item.children && item.children.length)
+      "
+      :value="subIndex"
+      class="min-h-54px"
+      @tab-click="doSubSelect"
+    >
+      <template v-for="item in subList">
+        <el-tab-pane :key="item.path" :name="item.path">
+          <span slot="label">
+            <i v-if="item.icon" :class="`el-icon-${item.icon}`" />
+            {{ item.name }}
+          </span>
+        </el-tab-pane>
+      </template>
+    </el-tabs>
   </div>
 </template>
 <script lang="ts">
-import {
-  defineComponent,
-  reactive,
-  ref,
-  PropType,
-  onMounted,
-  useRoute,
-  getCurrentInstance,
-  watch,
-} from '@nuxtjs/composition-api'
+import { defineComponent, ref, PropType } from '@nuxtjs/composition-api'
 import { INavItem } from '../typings'
 
 export default defineComponent({
@@ -60,31 +71,50 @@ export default defineComponent({
   },
   setup(props: any) {
     const root = ref(null)
-    const defaultIndex = ref()
-    const menuList = reactive(props.list)
-    const route = useRoute().value
-    const { proxy }: any = getCurrentInstance()
+    const mainList = ref(props.list)
+    const mainIndex = ref(mainList.value[0]?.path)
+    const subList = ref(
+      mainList.value[0]?.children?.length ? mainList.value[0].children : []
+    )
+    const subIndex = ref(subList.value?.length ? subList.value[0].path : '')
 
-    onMounted(() => {
-      if (
-        !route.path ||
-        menuList.every((list: { path: string }) => list.path !== route?.path)
-      ) {
-        proxy.defaultIndex = menuList[0].index
+    const doMainSelect = (index: string) => {
+      mainIndex.value = index
+      const { children } = mainList.value.find(
+        (item: { path: any }) => item.path === mainIndex.value
+      )
+      if (children?.length) {
+        subList.value = children
+        subIndex.value = subList.value[0]?.path
+      } else {
+        subList.value = []
+        subIndex.value = ''
       }
-    })
+    }
 
-    watch(defaultIndex, (newIndex, oldIndex) => {
-      if (newIndex !== oldIndex) {
-        console.log(newIndex)
-      }
-    })
+    const doSubSelect = ({ name }: any) => {
+      subIndex.value = name
+    }
 
     return {
       root,
-      menuList,
-      defaultIndex,
+      mainList,
+      mainIndex,
+      subList,
+      subIndex,
+      doMainSelect,
+      doSubSelect,
     }
   },
 })
 </script>
+<style lang="postcss" scoped>
+>>> .el-tabs__nav-wrap::after {
+  display: none;
+}
+.is-active .el-button {
+  color: #409eff;
+  border-color: #c6e2ff;
+  background-color: #ecf5ff;
+}
+</style>

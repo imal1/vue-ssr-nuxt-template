@@ -87,3 +87,14 @@ export default defineComponent({
   },
 })
 </script>
+<style lang="postcss" scoped>
+>>> .el-menu-item,
+>>> .el-submenu__title {
+  height: 48px;
+  line-height: 48px;
+}
+.el-submenu .el-menu-item {
+  height: 42px;
+  line-height: 42px;
+}
+</style>

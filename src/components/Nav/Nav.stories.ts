@@ -16,16 +16,22 @@ export default {
 const Nav: any = (_args: any, { argTypes }: any) => {
   return {
     props: Object.keys(argTypes),
-    template: `<Nav :list="list" :router="router" />`
+    template: `
+      <div>
+        <h1>主导航</h1>
+        <Nav :list="list" :router="router" />
+        <el-divider />
+        <h1>带子级导航</h1>
+        <Nav :list="list_with_sub" :router="router" />
+      </div>
+    `
   }
 }
 
 export const Navigation = Nav.bind({})
 
 Navigation.args = {
-  list: RouteJSON.data.map((route: any) => ({
-    ...route,
-    index: route.path
-  })),
+  list: RouteJSON.data.map((item: any) => ({ ...item, children: null })),
+  list_with_sub: RouteJSON.data,
   router: false
 }
