@@ -1,15 +1,13 @@
 <template>
-  <!-- <el-container>
+  <el-container>
     <el-header></el-header>
     <el-container>
       <el-aside width="auto"></el-aside>
       <el-main>
-        <Tutorial/>
       </el-main>
     </el-container>
     <el-footer height="30px"></el-footer>
-  </el-container> -->
-  <Tutorial/>
+  </el-container>
 </template>
 
 <script lang="ts">
