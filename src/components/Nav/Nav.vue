@@ -112,7 +112,7 @@ export default defineComponent({
 >>> .el-tabs__nav-wrap::after {
   display: none;
 }
-.is-active .el-button {
+.el-menu-item.is-active .el-button {
   color: #409eff;
   border-color: #c6e2ff;
   background-color: #ecf5ff;

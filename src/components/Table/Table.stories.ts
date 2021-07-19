@@ -64,5 +64,6 @@ Table.args = {
     date: '2016-05-03',
     name: '王小虎',
     address: '上海市普陀区金沙江路 1516 弄'
-  }]
+  }],
+  'show-header': false
 }

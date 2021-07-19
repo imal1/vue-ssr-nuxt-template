@@ -1,24 +1,16 @@
 <template>
   <div class="space-y-2">
-    <el-table border :data="data">
+    <el-table border :data="data" v-bind="otherAttrs">
       <template v-for="(column, index) in columns">
-        <el-table-column
-          v-bind="column"
-          :key="keyName ? column[keyName] : index"
-        />
+        <el-table-column v-bind="column" :key="index" />
       </template>
     </el-table>
-    <el-pagination
-      background
-      layout="prev, pager, next"
-      :total="total ? total : data.length"
-      class="text-right"
-    >
-    </el-pagination>
+    <el-pagination background class="text-right"> </el-pagination>
   </div>
 </template>
 <script lang="ts">
-import { defineComponent } from '@nuxtjs/composition-api'
+import { defineComponent, reactive } from '@nuxtjs/composition-api'
+import { OmitByArray } from '../utils'
 
 export default defineComponent({
   props: {
@@ -30,21 +22,16 @@ export default defineComponent({
       type: Array,
       required: true,
     },
-    keyName: {
-      type: String,
-      required: false,
-      default() {
-        return ''
-      },
-    },
-    total: {
-      type: Number,
-      required: false,
-      default() {
-        return 0
-      }
+  },
+  setup(props: any) {
+    const getOtherProps = OmitByArray(['columns', 'data', 'pagination'])
+    const otherAttrs = reactive(getOtherProps(props))
+
+    console.log(otherAttrs)
+
+    return {
+      otherAttrs,
     }
   },
-  setup() {},
 })
 </script>

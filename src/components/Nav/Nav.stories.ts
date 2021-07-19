@@ -24,7 +24,7 @@ const Nav: any = (_args: any, { argTypes }: any) => {
         <el-collapse-item title="带子级导航" :name="2">
           <Nav :list="list_sub" :router="router" />
         </el-collapse-item>
-      </div>
+      </el-collapse>
     `
   }
 }
