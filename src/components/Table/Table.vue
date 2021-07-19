@@ -37,6 +37,13 @@ export default defineComponent({
         return ''
       },
     },
+    total: {
+      type: Number,
+      required: false,
+      default() {
+        return 0
+      }
+    }
   },
   setup() {},
 })

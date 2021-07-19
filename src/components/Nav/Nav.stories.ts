@@ -17,12 +17,13 @@ const Nav: any = (_args: any, { argTypes }: any) => {
   return {
     props: Object.keys(argTypes),
     template: `
-      <div>
-        <h1>主导航</h1>
-        <Nav :list="list" :router="router" />
-        <el-divider />
-        <h1>带子级导航</h1>
-        <Nav :list="list_with_sub" :router="router" />
+      <el-collapse :value="[1,2]">
+        <el-collapse-item title="主导航" :name="1">
+          <Nav :list="list" :router="router" />
+        </el-collapse-item>
+        <el-collapse-item title="带子级导航" :name="2">
+          <Nav :list="list_sub" :router="router" />
+        </el-collapse-item>
       </div>
     `
   }
@@ -32,6 +33,6 @@ export const Navigation = Nav.bind({})
 
 Navigation.args = {
   list: RouteJSON.data.map((item: any) => ({ ...item, children: null })),
-  list_with_sub: RouteJSON.data,
+  list_sub: RouteJSON.data,
   router: false
 }
