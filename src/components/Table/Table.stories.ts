@@ -11,7 +11,7 @@ const TableObj: any = (_args: any, { argTypes }: any) => {
           <Table :columns="columns" :data="data" />
         </el-collapse-item>
         <el-collapse-item title="自定义列数据表格" :name="2">
-          <Table :columns="columns_action" :data="data" />
+          <Table :columns="columns_action" :data="data" :show-header="false" />
         </el-collapse-item>
       </el-collapse>
     `
@@ -64,6 +64,5 @@ Table.args = {
     date: '2016-05-03',
     name: '王小虎',
     address: '上海市普陀区金沙江路 1516 弄'
-  }],
-  'show-header': false
+  }]
 }

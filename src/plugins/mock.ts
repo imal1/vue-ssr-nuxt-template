@@ -1,4 +1,4 @@
-const Mock = require('mockjs');
+import Mock from 'mockjs'
 
 Mock.mock("/api/getRoutes",{
   code: 200,

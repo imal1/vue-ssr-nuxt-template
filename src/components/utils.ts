@@ -41,7 +41,15 @@ export function PickByArray(arr: any[]) {
 
 export function OmitByArray(arr: any[]) {
   return (obj: Record<string, any>) => {
-    return PickByArray(arr)(obj)
+    const keys = Object.keys(obj)
+    const result = {} as Record<string, any>
+    const pickObj = PickByArray(arr)(obj)
+    for (let i = 0; i <= keys.length; i++) {
+      if (!pickObj[keys[i]]) {
+        result[keys[i]] = obj[keys[i]]
+      }
+    }
+    return result
   }
 }
 

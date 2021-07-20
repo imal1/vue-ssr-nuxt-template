@@ -21,13 +21,12 @@ export default defineComponent({
     data: {
       type: Array,
       required: true,
-    },
+    }
   },
   setup(props: any) {
+    console.log(props)
     const getOtherProps = OmitByArray(['columns', 'data', 'pagination'])
     const otherAttrs = reactive(getOtherProps(props))
-
-    console.log(otherAttrs)
 
     return {
       otherAttrs,

@@ -1,5 +1,4 @@
 import { NuxtConfig } from '@nuxt/types'
-// import WindiCSS from 'vite-plugin-windicss'
 
 const config: NuxtConfig = {
   // Global page headers: https://go.nuxtjs.dev/config-head
@@ -41,12 +40,12 @@ const config: NuxtConfig = {
 
   // Modules for dev and build (recommended): https://go.nuxtjs.dev/config-modules
   buildModules: [
+    'nuxt-vite', // https://vite.nuxtjs.org
     '@nuxt/typescript-build', // https://go.nuxtjs.dev/typescript
     '@nuxtjs/composition-api/module', // https://composition-api.nuxtjs.org,
     '@nuxtjs/eslint-module', // https://go.nuxtjs.dev/eslint
     '@nuxtjs/stylelint-module', // https://go.nuxtjs.dev/stylelint
     'nuxt-windicss', // https://windicss.org/integrations/nuxt
-    // 'nuxt-vite', // https://vite.nuxtjs.org
     // 'nuxt-use-motion', // https://motion.vueuse.org
     'nuxt-build-optimisations', // https://github.com/harlan-zw/nuxt-build-optimisations
   ],
@@ -55,7 +54,7 @@ const config: NuxtConfig = {
   modules: [
     '@nuxt/http', // https://http.nuxtjs.org
     '@nuxtjs/dayjs', // https://github.com/nuxt-community/dayjs-module
-    'nuxt-i18n', // https://i18n.nuxtjs.org
+    // 'nuxt-i18n', // https://i18n.nuxtjs.org
     '@nuxt/image', // https://image.nuxtjs.org
     'nuxt-precompress', // https://github.com/frenchrabbit/nuxt-precompress
     '@luxdamore/nuxt-prune-html', // https://luxdamore.github.io/nuxt-prune-html
@@ -78,15 +77,19 @@ const config: NuxtConfig = {
     }
   },
 
-  // vite: {
-  //   ssr: true,
-  //   optimizeDeps: {
-  //     esbuildOptions: {
-  //       keepNames: true
-  //     },
-  //   },
-  //   plugins: [WindiCSS()]
-  // },
+  vite: {
+    ssr: true,
+    optimizeDeps: {
+      include: [
+        'cookie'
+      ],
+    },
+    // vue: {
+    //   vueTemplateOptions: {
+    //     optimizeSSR: true
+    //   }
+    // }
+  },
 
   i18n: {
     locales: ['zh', 'en'],
