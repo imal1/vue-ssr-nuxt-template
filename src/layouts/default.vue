@@ -9,7 +9,7 @@
       </client-only>
     </el-header>
     <el-container>
-      <el-aside class="<lg:w-auto lg:w-200px">
+      <el-aside v-if="menus.length" class="<lg:w-auto lg:w-200px">
         <client-only>
           <Menu router :list="menus" class="my-3px" />
         </client-only>
