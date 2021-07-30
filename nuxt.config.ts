@@ -28,6 +28,7 @@ const config: NuxtConfig = {
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
   plugins: [
     { src: '@/plugins/element-ui', ssr: false },
+    { src: '@/plugins/http' },
     // { src: '@/plugins/inject' },
     { src: '@/plugins/mock' }, // http://mockjs.com
   ],
