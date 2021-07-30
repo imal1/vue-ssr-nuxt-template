@@ -1,0 +1,76 @@
+{
+  "code": 200,
+  "msg": null,
+  "data": [
+    {
+      "name": "索引管理",
+      "path": "/IndexManagement",
+      "icon": "s-home",
+      "children": [
+        {
+          "name": "用户管理",
+          "path": "/UserManagement",
+          "icon": "s-home"
+        },
+        {
+          "name": "配置管理",
+          "path": "/ConfigManagement"
+        },
+        {
+          "name": "角色管理",
+          "path": "/RoleManagement"
+        },
+        {
+          "name": "任务管理",
+          "path": "/TargetManagement"
+        }
+      ]
+    },
+    {
+      "name": "规则管理",
+      "path": "/RuleManagement",
+      "children": [
+        {
+          "name": "用户管理2",
+          "path": "/UserManagement2"
+        },
+        {
+          "name": "配置管理2",
+          "path": "/ConfigManagement2"
+        },
+        {
+          "name": "角色管理2",
+          "path": "/RoleManagement2"
+        }
+      ]
+    },
+    {
+      "name": "基础数据管理",
+      "path": "/BaseDataManagement",
+      "children": [
+        {
+          "name": "用户管理3",
+          "path": "/UserManagement3"
+        },
+        {
+          "name": "配置管理3",
+          "path": "/ConfigManagement3"
+        }
+      ]
+    },
+    {
+      "name": "数据统计",
+      "path": "/DataStatistics",
+      "children": [
+        {
+          "name": "用户管理4",
+          "path": "/UserManagement4"
+        }
+      ]
+    },
+    {
+      "name": "任务管理",
+      "path": "/TaskManagement"
+    }
+  ]
+}
