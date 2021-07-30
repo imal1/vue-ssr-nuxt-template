@@ -27,7 +27,8 @@ const config: NuxtConfig = {
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
   plugins: [
-    { src: '@/plugins/element-ui' },
+    { src: '@/plugins/element-ui', ssr: false },
+    // { src: '@/plugins/inject' },
     { src: '@/plugins/mock' }, // http://mockjs.com
   ],
 
@@ -40,13 +41,12 @@ const config: NuxtConfig = {
 
   // Modules for dev and build (recommended): https://go.nuxtjs.dev/config-modules
   buildModules: [
-    'nuxt-vite', // https://vite.nuxtjs.org
+    // 'nuxt-vite', // https://vite.nuxtjs.org
     '@nuxt/typescript-build', // https://go.nuxtjs.dev/typescript
     '@nuxtjs/composition-api/module', // https://composition-api.nuxtjs.org,
     '@nuxtjs/eslint-module', // https://go.nuxtjs.dev/eslint
     '@nuxtjs/stylelint-module', // https://go.nuxtjs.dev/stylelint
     'nuxt-windicss', // https://windicss.org/integrations/nuxt
-    // 'nuxt-use-motion', // https://motion.vueuse.org
     'nuxt-build-optimisations', // https://github.com/harlan-zw/nuxt-build-optimisations
   ],
 
@@ -83,12 +83,7 @@ const config: NuxtConfig = {
       include: [
         'cookie'
       ],
-    },
-    // vue: {
-    //   vueTemplateOptions: {
-    //     optimizeSSR: true
-    //   }
-    // }
+    }
   },
 
   i18n: {

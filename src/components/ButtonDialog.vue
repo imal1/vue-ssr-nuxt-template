@@ -21,7 +21,7 @@
 </template>
 <script lang="ts">
 import { defineComponent, reactive, ref } from '@nuxtjs/composition-api'
-import { GetObjectByTypeofValue, DifferFromObject } from '../utils'
+import { GetObjectByTypeofValue, DifferFromObject } from './utils'
 
 export default defineComponent({
   props: {

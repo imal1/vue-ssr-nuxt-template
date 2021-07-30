@@ -7,7 +7,7 @@
  * @LastEditTime: 2021-07-15 17:33:06
 -->
 <template>
-  <el-menu :ref="root" :router="router">
+  <el-menu :ref="root" v-bind="menuAttrs" v-on="menuEvents">
     <template v-for="item in menuList">
       <el-submenu
         v-if="item.children && item.children.length > 0"
@@ -61,7 +61,8 @@ import {
   reactive,
   ref,
 } from '@nuxtjs/composition-api'
-import { IMenuItem } from '../typings'
+import { IMenuItem } from './typings'
+import { GetObjectByTypeofValue, OmitByArray } from './utils'
 
 export default defineComponent({
   props: {
@@ -69,20 +70,19 @@ export default defineComponent({
       type: Array as PropType<IMenuItem[]>,
       required: true,
     },
-    router: {
-      type: Boolean,
-      default() {
-        return false
-      },
-    },
   },
-  setup(props: any) {
+  setup({ list }: any, { attrs }: any) {
     const root = ref(null)
-    const menuList = reactive(props.list)
+    const menuList = reactive(list)
+    const getFuncProps = GetObjectByTypeofValue('function')
+    const menuEvents = getFuncProps(attrs)
+    const menuAttrs = reactive(OmitByArray(Object.keys(menuEvents))(attrs))
 
     return {
       root,
       menuList,
+      menuAttrs,
+      menuEvents,
     }
   },
 })

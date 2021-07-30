@@ -2,6 +2,7 @@ import { ActionTree, MutationTree } from 'vuex'
 
 const state = () => ({
   hosts: [] as string[],
+  routes: [] as Record<string, any>[]
 })
 
 export type RootState = ReturnType<typeof state>
@@ -10,6 +11,9 @@ const mutations: MutationTree<RootState> = {
   setHosts(state: Record<string, any>, hosts: Array<any>) {
     state.hosts = hosts
   },
+  setRoutes(state: Record<string, any>, routes: Array<any>) {
+    state.routes = routes
+  }
 }
 
 const actions: ActionTree<RootState, RootState> = {
@@ -42,12 +46,13 @@ const actions: ActionTree<RootState, RootState> = {
       throw new Error(error)
     }
   },
-  async fetchRoutes(_: any, { $http, app }: Record<string, any>) {
+  async fetchRoutes({ commit }: Record<string, any>, { $http }: Record<string, any>) {
     try {
       const { data } = await $http.$get('/routes.json')
-      if (data?.length) {
-        data.forEach((route: Record<string, any>) => app.router.addRoute(route))
+      if (!data?.length) {
+        throw new Error('未添加路由数据')
       }
+      commit('setRoutes', data)
     } catch (error) {
       throw new Error(error)
     }

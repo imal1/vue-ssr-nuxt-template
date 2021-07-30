@@ -45,7 +45,7 @@ export function OmitByArray(arr: any[]) {
     const result = {} as Record<string, any>
     const pickObj = PickByArray(arr)(obj)
     for (let i = 0; i <= keys.length; i++) {
-      if (!pickObj[keys[i]]) {
+      if (keys[i] && !pickObj[keys[i]]) {
         result[keys[i]] = obj[keys[i]]
       }
     }

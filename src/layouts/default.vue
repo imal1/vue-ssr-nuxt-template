@@ -1,36 +1,62 @@
 <template>
-  <el-container>
-    <el-header>
-      <Nav :list="[]" />
+  <el-container class="lg:container lg:mx-auto">
+    <el-header class="flex">
+      <client-only>
+        <div class="flex-1">
+          <img src="~/assets/favicon.png" class="max-h-60px" />
+        </div>
+        <Nav :list="routes" />
+      </client-only>
     </el-header>
-    <Nuxt />
+    <el-container>
+      <el-aside class="<lg:w-auto lg:w-200px">
+        <client-only>
+          <Menu router :list="menus" class="my-3px" />
+        </client-only>
+      </el-aside>
+      <el-main>
+        <client-only>
+          <Nuxt />
+        </client-only>
+      </el-main>
+    </el-container>
     <el-footer></el-footer>
   </el-container>
 </template>
 <script lang="ts">
 import {
   defineComponent,
-  useRouter,
-  useContext,
+  useStore,
   ref,
-  // useStore
+  useFetch,
 } from '@nuxtjs/composition-api'
+import MenuJSON from '../static/menus.json'
 
 export default defineComponent({
   setup() {
-    const { ssrContext } = useContext()
-    const router = useRouter()
-    // const store = useStore()
-    let list: any = ref([])
-    if (ssrContext) {
-      list = router.getRoutes().map((route: any) => ({
+    const { state }: Record<string, any> = useStore()
+    const routes = ref(
+      state.routes.map((route: Record<string, any>) => ({
         ...route,
         index: route.path,
       }))
-    }
+    )
+    const menus = ref([] as any[])
+    const { fetch } = useFetch(async () => {
+      if (MenuJSON.data.length) {
+        await (menus.value = MenuJSON.data)
+      }
+    })
+    fetch()
     return {
-      list,
+      routes,
+      menus,
     }
   },
 })
 </script>
+<style lang="postcss" scoped>
+.el-header {
+  border-bottom: solid 1px #e6e6e6;
+}
+</style>
