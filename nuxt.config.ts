@@ -27,9 +27,8 @@ const config: NuxtConfig = {
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
   plugins: [
+    { src: '@/plugins/inject', ssr: false },
     { src: '@/plugins/element-ui', ssr: false },
-    { src: '@/plugins/http' },
-    // { src: '@/plugins/inject' },
     { src: '@/plugins/mock' }, // http://mockjs.com
   ],
 
@@ -62,6 +61,7 @@ const config: NuxtConfig = {
     '@nuxtjs/component-cache', // https://github.com/nuxt-community/component-cache-module
     // '@dewib/xhr-cache', // https://xhr-cache.dewib.com
     '@nuxtjs/auth-next', // https://auth.nuxtjs.org
+    '@nuxtjs/proxy', // https://github.com/nuxt-community
     ['@nuxtjs/html-minifier', { logHtml: true }], // https://github.com/nuxt-community/html-minifier-module
   ],
 
@@ -74,6 +74,22 @@ const config: NuxtConfig = {
     typeCheck: {
       eslint: {
         files: './src/**/*.{ts,js,vue}'
+      }
+    }
+  },
+
+  http: {
+    proxy: true,
+    prefix: '/api'
+  },
+
+  proxy: {
+    '/api': {
+      target: 'http://localhost:3000',
+      pathRewrite: { '^/api/': '' },
+      async router() {
+        const hostJSON = await require('./src/static/host.json')
+        return hostJSON.data
       }
     }
   },
