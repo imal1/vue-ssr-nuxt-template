@@ -86,7 +86,7 @@ const config: NuxtConfig = {
   proxy: {
     '/api': {
       target: 'http://localhost:3000',
-      pathRewrite: { '^/api/': '' },
+      pathRewrite: { '^/api': '' },
       async router() {
         const hostJSON = await require('./src/static/host.json')
         return hostJSON.data
