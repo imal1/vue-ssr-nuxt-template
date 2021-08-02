@@ -13,9 +13,9 @@ const mutations: MutationTree<RootState> = {
 }
 
 const actions: ActionTree<RootState, RootState> = {
-  async fetchRoutes({ commit }: Record<string, any>, { $http }: Record<string, any>) {
+  async fetchRoutes({ commit }: Record<string, any>, { _$http }: Record<string, any>) {
     try {
-      const { data } = await $http.$get('/menus/getMenus')
+      const { data } = await require('../static/routes.json')
       if (!data?.length) {
         throw new Error('未添加路由数据')
       }

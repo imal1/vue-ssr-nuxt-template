@@ -13,9 +13,9 @@ const mutations: MutationTree<RootState> = {
 }
 
 const actions: ActionTree<RootState, RootState> = {
-  async fetchMenus({ commit }: Record<string, any>, { $http }: Record<string, any>) {
+  async fetchMenus({ commit }: Record<string, any>, { _$http }: Record<string, any>) {
     try {
-      const menus = await $http.$get('/target/listChapter?chapterId=0').then((res: { data: any }) => res.data)
+      const menus = await require('../static/menus.json').then((res: { data: any }) => res.data)
       if (menus.length) {
         commit('setMenus', menus)
       }

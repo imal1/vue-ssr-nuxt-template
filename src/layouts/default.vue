@@ -24,13 +24,7 @@
   </el-container>
 </template>
 <script lang="ts">
-import {
-  defineComponent,
-  useStore,
-  ref,
-  useFetch,
-} from '@nuxtjs/composition-api'
-import MenuJSON from '../static/menus.json'
+import { defineComponent, useStore, ref } from '@nuxtjs/composition-api'
 
 export default defineComponent({
   setup() {
@@ -41,13 +35,7 @@ export default defineComponent({
         index: route.path,
       }))
     )
-    const menus = ref([] as any[])
-    const { fetch } = useFetch(async () => {
-      if (MenuJSON.data.length) {
-        await (menus.value = MenuJSON.data)
-      }
-    })
-    fetch()
+    const menus = ref(state.menu.menus)
     return {
       routes,
       menus,
