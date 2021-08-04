@@ -58,15 +58,9 @@
   </el-menu>
 </template>
 <script lang="ts">
-import {
-  defineComponent,
-  PropType,
-  reactive,
-  ref,
-  watch,
-} from '@nuxtjs/composition-api'
+import { defineComponent, PropType, ref, watch } from '@nuxtjs/composition-api'
+import { omit, keys, isFunction, pickBy } from 'lodash'
 import { IMenuItem } from './typings'
-import { GetObjectByTypeofValue, OmitByArray } from './utils'
 
 export default defineComponent({
   props: {
@@ -78,14 +72,12 @@ export default defineComponent({
   setup({ list }: any, ctx: any) {
     const root = ref(null)
     const menuList = ref(list)
-    const getFuncProps = GetObjectByTypeofValue('function')
     const menuEvents = ref({})
     const menuAttrs = ref({})
+
     watch(ctx.attrs, (newAttrs) => {
-      menuEvents.value = getFuncProps(newAttrs)
-      menuAttrs.value = reactive(
-        OmitByArray(Object.keys(menuEvents.value))(newAttrs)
-      )
+      menuEvents.value = pickBy(newAttrs, isFunction)
+      menuAttrs.value = omit(newAttrs, keys(menuEvents.value))
     })
 
     return {
@@ -108,3 +100,19 @@ export default defineComponent({
   line-height: 42px;
 }
 </style>
+
+function keys(value: {}): any {
+  throw new Error('Function not implemented.')
+}
+
+function pickBy(newAttrs: { [x: string]: unknown }, isFunction: any): {} {
+  throw new Error('Function not implemented.')
+}
+
+function omit(newAttrs: { [x: string]: unknown }, arg1: any): {} {
+  throw new Error('Function not implemented.')
+}
+
+function keys(value: {}): any {
+  throw new Error('Function not implemented.')
+}

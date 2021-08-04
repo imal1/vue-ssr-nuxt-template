@@ -37,7 +37,7 @@ import {
   reactive,
   ref,
 } from '@nuxtjs/composition-api'
-import { GetObjectByTypeofValue, OmitByArray } from './utils'
+import { omit, keys, isFunction, pickBy } from 'lodash'
 
 export interface IFormItem {
   prop: string
@@ -65,23 +65,20 @@ export default defineComponent({
     const root = ref(null)
     const model = reactive(values)
     const formItems = ref([] as any[])
-    const getFuncProps = GetObjectByTypeofValue('function')
     // 获取表单属性
-    const formEvents = getFuncProps(attrs)
-    const formAttrs = reactive(OmitByArray(Object.keys(formEvents))(attrs))
+    const formEvents = pickBy(attrs, isFunction)
+    const formAttrs = omit(attrs, keys(formEvents.value))
     // 获取各栏属性
     formItems.value = items.map((item: any) => {
       const { content, ...otherItem } = item
-      const columnEvents = getFuncProps(otherItem)
-      const columnAttrs = OmitByArray(Object.keys(columnEvents))(otherItem)
+      const columnEvents = pickBy(otherItem, isFunction)
+      const columnAttrs = omit(otherItem, keys(columnEvents.value))
       item = { content, columnAttrs, columnEvents }
       // 获取输入框属性
       if (item.content?.is) {
         const { is, ...otherContent } = content
-        const contentEvents = getFuncProps(otherContent)
-        const contentAttrs = OmitByArray(Object.keys(contentEvents))(
-          otherContent
-        )
+        const contentEvents = pickBy(otherContent, isFunction)
+        const contentAttrs = omit(otherContent, keys(contentEvents.value))
         item.content = { is, contentEvents, contentAttrs }
       }
       return item

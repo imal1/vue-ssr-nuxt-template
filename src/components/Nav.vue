@@ -54,15 +54,9 @@
   </div>
 </template>
 <script lang="ts">
-import {
-  defineComponent,
-  ref,
-  PropType,
-  reactive,
-  // useRoute,
-} from '@nuxtjs/composition-api'
+import { defineComponent, ref, PropType, watch } from '@nuxtjs/composition-api'
+import { omit, keys, isFunction, pickBy } from 'lodash'
 import { INavItem } from './typings'
-import { GetObjectByTypeofValue, OmitByArray } from './utils'
 
 export default defineComponent({
   props: {
@@ -80,14 +74,17 @@ export default defineComponent({
   setup(props: any, { attrs }: any) {
     const root = ref(null)
     const menuList = ref(props.list)
-    // const { params } = useRoute()
     const { path, children } = menuList.value[0]
     const menuIndex = ref(
       children?.length ? `${path}${children[0].path}` : path
     )
-    const getFuncProps = GetObjectByTypeofValue('function')
-    const menuEvents = getFuncProps(attrs)
-    const menuAttrs = reactive(OmitByArray(Object.keys(menuEvents))(attrs))
+    const menuEvents = ref({})
+    const menuAttrs = ref({})
+
+    watch(attrs, (newAttrs) => {
+      menuEvents.value = pickBy(newAttrs, isFunction)
+      menuAttrs.value = omit(newAttrs, keys(menuEvents.value))
+    })
 
     return {
       root,

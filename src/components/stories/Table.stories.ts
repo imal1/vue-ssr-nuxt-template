@@ -20,8 +20,8 @@ const TableCompatibleObj: any = (_args: any, { argTypes }: any) => {
     props: Object.keys(argTypes),
     template: `
       <Table :columns="columns" :data="data">
-        <template #action>
-          <ButtonDialog :button="{label:'编辑',size:'mini'}" :dialog="{width:'70%'}">
+        <template #action="{index}">
+          <ButtonDialog v-if="index !== 2" :button="{label:'编辑',size:'mini'}" :dialog="{width:'70%'}">
             <Table :columns="columns" :data="data" :show-header="false" />
           </ButtonDialog>
         </template>
