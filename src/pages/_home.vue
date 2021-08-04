@@ -1,5 +1,5 @@
 <template>
-  <el-container>
+  <div>
     <portal to="header">
       <el-header class="flex border-b border-border-light">
         <div class="flex-1">
@@ -21,7 +21,8 @@
     <portal to="footer">
       <el-footer />
     </portal>
-    <!-- <el-header height="20px" class="px-0">
+    <el-container direction="vertical">
+      <!-- <el-header height="20px" class="px-0">
       <el-breadcrumb separator="/">
         <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
         <el-breadcrumb-item><a href="/">活动管理</a></el-breadcrumb-item>
@@ -29,8 +30,9 @@
         <el-breadcrumb-item>活动详情</el-breadcrumb-item>
       </el-breadcrumb>
     </el-header> -->
-    <NuxtChild />
-  </el-container>
+      <NuxtChild />
+    </el-container>
+  </div>
 </template>
 
 <script lang="ts">
