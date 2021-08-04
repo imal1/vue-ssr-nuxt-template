@@ -13,7 +13,7 @@
         <Menu
           router
           :list="menus"
-          :default-active="route.params.main"
+          :default-active="defaultActive"
           class="h-full"
         />
       </el-aside>
@@ -37,6 +37,8 @@
 import {
   computed,
   defineComponent,
+  getCurrentInstance,
+  onUpdated,
   ref,
   useRoute,
   useRouter,
@@ -47,23 +49,26 @@ export default defineComponent({
   setup(_prop: any) {
     const store = useStore()
     const router = useRouter()
-    const route = useRoute().value
-    const routes = ref(
-      store.getters.routesWithPath.map((route: Record<string, any>) => ({
-        ...route,
-        index: route.path,
-      }))
-    )
-    const { home } = route.params
+    const routes = ref(store.getters.routesWithPath)
+    const route = useRoute()
+    const defaultActive = ref('')
+    const { home, main } = route.value.params
     const menus = computed(() => store.getters['menu/menusWithRoute'](home))
     if (!home) {
       router.replace(`/${routes.value[0].path}`)
     }
 
+    onUpdated(() => {
+      const { data }: any = getCurrentInstance()
+      if (data.defaultActive !== main) {
+        data.defaultActive = main
+      }
+    })
+
     return {
       routes,
-      route,
       menus,
+      defaultActive,
     }
   },
 })
