@@ -17,3 +17,8 @@ export default defineComponent({
   setup() {},
 })
 </script>
+<style lang="postcss" scoped>
+.el-container .el-container {
+  height: calc(100vh - 60px);
+}
+</style>
