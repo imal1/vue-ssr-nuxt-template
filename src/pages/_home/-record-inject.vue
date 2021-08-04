@@ -1,30 +1,44 @@
 <template>
-  <el-collapse class="w-full" :value="details.map((d) => d.id)">
-    <template v-for="detail in details">
-      <el-collapse-item :key="detail.id" :name="detail.id" :title="detail.name">
-        <Table
-          border
-          stripe
-          default-expand-all
-          :show-header="false"
-          :columns="columns"
-          :data="detail.childrenList"
-          :tree-props="treeProps"
-          row-key="id"
+  <div>
+    <el-collapse class="w-full" :value="details.map((d) => d.id)">
+      <template v-for="detail in details">
+        <el-collapse-item
+          :key="detail.id"
+          :name="detail.id"
+          :title="detail.name"
         >
-          <!-- <template #input>
-            <el-input />
-          </template> -->
-        </Table>
-      </el-collapse-item>
-    </template>
-  </el-collapse>
+          <Table
+            border
+            stripe
+            default-expand-all
+            :show-header="false"
+            :columns="columns"
+            :data="detail.childrenList"
+            :tree-props="{ children: 'childrenList' }"
+            row-key="id"
+          >
+            <template #input="{ row }">
+              <el-input-number
+                v-if="row.isTarget"
+                v-model="model[row.id]"
+                :min="0"
+              />
+            </template>
+          </Table>
+        </el-collapse-item>
+      </template>
+    </el-collapse>
+    <div class="flex justify-center mt-20px">
+      <el-button type="primary" @click="doSubmit">提交</el-button>
+    </div>
+  </div>
 </template>
 
 <script lang="ts">
 import {
   computed,
   defineComponent,
+  reactive,
   useRoute,
   useRouter,
   useStore,
@@ -36,6 +50,7 @@ export default defineComponent({
     const store = useStore()
     const router = useRouter()
     const route = useRoute()
+    const model = reactive({})
     store.dispatch('menu/fetchMenus', ctx.root)
     const menus = computed(() =>
       store.getters['menu/menusWithRoute'](route.value.params.home)
@@ -62,16 +77,20 @@ export default defineComponent({
       },
       {
         prop: 'input',
+        align: 'center',
         width: '200',
       },
     ]
 
-    const treeProps = { hasChildren: 'hasChildren', children: 'childrenList' }
+    const doSubmit = () => {
+      console.log(model)
+    }
 
     return {
       details,
       columns,
-      treeProps,
+      model,
+      doSubmit,
     }
   },
 })

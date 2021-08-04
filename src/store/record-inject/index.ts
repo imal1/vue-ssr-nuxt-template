@@ -8,15 +8,33 @@ export type RootState = ReturnType<typeof state>
 
 const mutations: MutationTree<RootState> = {
   setDetails(state: Record<string, any>, details: Array<any>) {
-    state.details = details
+    state.details = doInChildrenList(details)
   }
 }
 
+function doInChildrenList(arr: any[]) {
+  const result: any[] = []
+  arr.forEach((item: any) => {
+    if (!item.childrenList) {
+      if (item.targets?.length) {
+        item.childrenList = item.targets.map((t: any) => ({
+          ...t,
+          isTarget: true,
+          id: `target-${t.id}`
+        }))
+      } else {
+        item.childrenList = []
+      }
+    } else {
+      doInChildrenList(item.childrenList)
+    }
+    result.push(item)
+  })
+  return result
+}
+
 const getters: GetterTree<RootState, RootState> = {
-  details: (state: RootState) => state.details.map((d: any) => ({
-    ...d,
-    childrenList: d.childrenList ? d.childrenList : []
-  }))
+  details: (state: RootState) => state.details
 }
 
 const actions: ActionTree<RootState, RootState> = {
