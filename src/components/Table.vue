@@ -3,7 +3,11 @@
     <el-table :data="data" v-bind="$attrs">
       <template v-for="(column, index) in columns">
         <el-table-column v-bind="column" :key="index">
-          <slot :name="column.prop" />
+          <template #default="{ row }">
+            <slot :name="column.prop" :row="row">
+              {{ row[column.prop] }}
+            </slot>
+          </template>
         </el-table-column>
       </template>
     </el-table>
