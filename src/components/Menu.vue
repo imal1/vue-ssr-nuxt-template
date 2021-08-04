@@ -29,7 +29,10 @@
               <span>{{ subItem.name }}</span>
             </template>
             <template v-for="(trdItem, trdKey) in subItem.children">
-              <el-menu-item :key="`${key}-${subKey}-${trdKey}`" v-bind="trdItem">
+              <el-menu-item
+                :key="`${key}-${subKey}-${trdKey}`"
+                v-bind="trdItem"
+              >
                 <template slot="title">
                   <i v-if="trdItem.icon" :class="`el-icon-${trdItem.icon}`" />
                   <span>{{ trdItem.name }}</span>
@@ -60,6 +63,7 @@ import {
   PropType,
   reactive,
   ref,
+  watch,
 } from '@nuxtjs/composition-api'
 import { IMenuItem } from './typings'
 import { GetObjectByTypeofValue, OmitByArray } from './utils'
@@ -75,8 +79,14 @@ export default defineComponent({
     const root = ref(null)
     const menuList = ref(list)
     const getFuncProps = GetObjectByTypeofValue('function')
-    const menuEvents = getFuncProps(ctx.attrs)
-    const menuAttrs = reactive(OmitByArray(Object.keys(menuEvents))(ctx.attrs))
+    const menuEvents = ref({})
+    const menuAttrs = ref({})
+    watch(ctx.attrs, (newAttrs) => {
+      menuEvents.value = getFuncProps(newAttrs)
+      menuAttrs.value = reactive(
+        OmitByArray(Object.keys(menuEvents.value))(newAttrs)
+      )
+    })
 
     return {
       root,
