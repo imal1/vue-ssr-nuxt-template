@@ -1,4 +1,4 @@
-import { ActionTree, MutationTree } from 'vuex'
+import { ActionTree, MutationTree, GetterTree } from 'vuex'
 
 const state = () => ({
   menus: [] as Record<string, any>[]
@@ -12,10 +12,27 @@ const mutations: MutationTree<RootState> = {
   }
 }
 
+const getters: GetterTree<RootState, RootState> = {
+  menusWithRoute: (state: RootState) => {
+    return (home: string) =>
+      state.menus.map((item: any) => {
+        item.index = item.index
+          ? `${item.index}`
+          : `${item.id}`
+        item.route = `/${home}/${item.index}`
+        return item
+      })
+  }
+}
+
 const actions: ActionTree<RootState, RootState> = {
-  async fetchMenus({ commit }: Record<string, any>, { _$http }: Record<string, any>) {
+  async fetchMenus(
+    { commit }: Record<string, any>,
+    { $http }: Record<string, any>
+  ) {
     try {
-      const menus = await require('../static/menus.json').then((res: { data: any }) => res.data)
+      const menus = await $http.$get('/target/listTopChapter')
+        .then((res: { data: any }) => res.data)
       if (menus.length) {
         commit('setMenus', menus)
       }
@@ -28,5 +45,6 @@ const actions: ActionTree<RootState, RootState> = {
 export default {
   state,
   mutations,
-  actions
+  actions,
+  getters
 }

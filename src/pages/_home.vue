@@ -14,12 +14,12 @@
           router
           :list="menus"
           :default-active="route.params.main"
-          class="my-7px"
+          class="h-full"
         />
       </el-aside>
     </portal>
     <portal to="footer">
-      <el-footer />
+      <!-- <el-footer /> -->
     </portal>
     <!-- <el-header height="20px" class="px-0">
       <el-breadcrumb separator="/">
@@ -45,17 +45,20 @@ import {
 
 export default defineComponent({
   setup(_prop: any) {
-    const { state }: any = useStore()
+    const store = useStore()
     const router = useRouter()
     const route = useRoute().value
     const routes = ref(
-      state.routes.map((route: Record<string, any>) => ({
+      store.getters.routesWithPath.map((route: Record<string, any>) => ({
         ...route,
         index: route.path,
       }))
     )
-    const menus = computed(() => state.menu.menus)
-    router.replace(`/${routes.value[0].path}`)
+    const { home } = route.params
+    const menus = computed(() => store.getters['menu/menusWithRoute'](home))
+    if (!home) {
+      router.replace(`/${routes.value[0].path}`)
+    }
 
     return {
       routes,

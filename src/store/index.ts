@@ -1,4 +1,4 @@
-import { ActionTree, MutationTree } from 'vuex'
+import { ActionTree, MutationTree, GetterTree } from 'vuex'
 
 const state = () => ({
   routes: [] as Record<string, any>[]
@@ -12,14 +12,26 @@ const mutations: MutationTree<RootState> = {
   }
 }
 
+const getters: GetterTree<RootState, RootState> = {
+  routesWithPath: (state: RootState) => state.routes.map((d: any) => ({
+    ...d,
+    path: d.path ? d.path : d.index
+  }))
+}
+
 const actions: ActionTree<RootState, RootState> = {
-  async fetchRoutes({ commit }: Record<string, any>, { _$http }: Record<string, any>) {
+  async fetchRoutes(
+    { commit }: Record<string, any>,
+    { $http }: Record<string, any>
+  ) {
     try {
-      const { data } = await require('../static/routes.json')
-      if (!data?.length) {
+      const routes = await $http
+        .$get('/menus/getMenus')
+        .then((res: any) => res.data)
+      if (!routes?.length) {
         throw new Error('未添加路由数据')
       }
-      commit('setRoutes', data)
+      commit('setRoutes', routes)
     } catch (error) {
       throw new Error(error)
     }
@@ -34,4 +46,5 @@ export default {
   state,
   mutations,
   actions,
+  getters
 }
