@@ -1,6 +1,6 @@
 <template>
   <div class="space-y-2">
-    <el-table border :data="data" v-bind="$attrs">
+    <el-table :data="data" v-bind="$attrs">
       <template v-for="(column, index) in columns">
         <el-table-column v-bind="column" :key="index">
           <slot :name="column.prop" />
