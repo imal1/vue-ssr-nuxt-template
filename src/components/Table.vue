@@ -1,11 +1,11 @@
 <template>
   <div class="space-y-2">
-    <el-table :data="data" v-bind="$attrs">
-      <template v-for="(column, index) in columns">
-        <el-table-column v-bind="column" :key="index">
-          <template #default="{ row }">
-            <slot :name="column.prop" :row="row">
-              {{ row[column.prop] }}
+    <el-table :data="data" v-bind="attrs" v-on="events">
+      <template v-for="(col, index) in columns">
+        <el-table-column v-bind="col" :key="index">
+          <template #default="{ row, column, $index }">
+            <slot :name="col.prop" :row="row" :column="column" :index="$index">
+              {{ row[col.prop] }}
             </slot>
           </template>
         </el-table-column>
@@ -15,7 +15,8 @@
   </div>
 </template>
 <script lang="ts">
-import { defineComponent, PropType } from '@nuxtjs/composition-api'
+import { defineComponent, PropType, ref, watch } from '@nuxtjs/composition-api'
+import { pickBy, omit, keys, isFunction } from 'lodash'
 
 export interface ITableColumn {
   prop: string
@@ -44,5 +45,19 @@ export default defineComponent({
       },
     },
   },
+  setup(_props: any, ctx: any) {
+    const attrs = ref({})
+    const events = ref({})
+
+    watch(ctx.attrs, (newAttrs) => {
+      events.value = pickBy(newAttrs, isFunction)
+      attrs.value = omit(newAttrs, keys(events.value))
+    })
+
+    return {
+      attrs,
+      events
+    }
+  }
 })
 </script>

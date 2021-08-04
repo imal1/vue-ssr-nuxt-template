@@ -21,7 +21,7 @@
 </template>
 <script lang="ts">
 import { defineComponent, reactive, ref } from '@nuxtjs/composition-api'
-import { GetObjectByTypeofValue, DifferFromObject } from './utils'
+import { omit, keys, isFunction, pickBy } from 'lodash'
 
 export default defineComponent({
   props: {
@@ -41,11 +41,10 @@ export default defineComponent({
     const visible = ref(false)
     const buttonProps = reactive(props.button)
     const dialogProps = reactive(props.dialog)
-    const getFuncProps = GetObjectByTypeofValue('function')
-    const buttonEvents = getFuncProps(buttonProps)
-    const dialogEvents = getFuncProps(dialogProps)
-    const buttonAttrs = DifferFromObject(buttonEvents, buttonProps)
-    const dialogAttrs = DifferFromObject(dialogEvents, dialogProps)
+    const buttonEvents = pickBy(buttonProps, isFunction)
+    const dialogEvents = pickBy(dialogProps, isFunction)
+    const buttonAttrs = omit(buttonProps, keys(buttonEvents))
+    const dialogAttrs = omit(dialogProps, keys(dialogEvents))
     const { click } = buttonEvents
 
     buttonEvents.click = () => {

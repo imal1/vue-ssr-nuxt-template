@@ -50,9 +50,9 @@ import {
   reactive,
   ref,
 } from '@nuxtjs/composition-api'
+import { omit, keys, isFunction, pickBy } from 'lodash'
 import { IFormItem } from './Form.vue'
 import { ITableColumn } from './Table.vue'
-import { GetObjectByTypeofValue, OmitByArray } from './utils'
 
 interface IFormProps {
   items: IFormItem[]
@@ -92,13 +92,12 @@ export default defineComponent({
     const { form, tree, table } = props
     const { items, values, ...otherFormProps } = form
     const { columns, data, pagination, ...otherTableProps } = table
-    const getFunctionProp = GetObjectByTypeofValue('function')
-    const formEvents = getFunctionProp(otherFormProps)
-    const formAttrs = OmitByArray(Object.keys(formEvents))(otherFormProps)
-    const treeEvents = getFunctionProp(form)
-    const treeAttrs = OmitByArray(Object.keys(treeEvents))(tree)
-    const tableEvents = getFunctionProp(form)
-    const tableAttrs = OmitByArray(Object.keys(tableEvents))(otherTableProps)
+    const formEvents = pickBy(otherFormProps, isFunction)
+    const formAttrs = omit(otherFormProps, keys(formEvents))
+    const treeEvents = pickBy(tree, isFunction)
+    const treeAttrs = omit(tree, keys(treeEvents))
+    const tableEvents = pickBy(otherTableProps, isFunction)
+    const tableAttrs = omit(otherTableProps, keys(tableEvents))
     const getNamedSlots = (name: string) => {
       const result = {} as Record<string, any>
       const keys = Object.keys(slots)
