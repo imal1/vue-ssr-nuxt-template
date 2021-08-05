@@ -29,6 +29,7 @@ const config: NuxtConfig = {
   plugins: [
     { src: '@/plugins/inject', ssr: false },
     { src: '@/plugins/element-ui', ssr: false },
+    { src: '@/plugins/http' },
     { src: '@/plugins/mock' }, // http://mockjs.com
   ],
 

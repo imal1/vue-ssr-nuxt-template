@@ -7,24 +7,7 @@
           :name="detail.id"
           :title="detail.name"
         >
-          <Table
-            border
-            stripe
-            default-expand-all
-            :show-header="false"
-            :columns="columns"
-            :data="detail.childrenList"
-            :tree-props="{ children: 'childrenList' }"
-            row-key="id"
-          >
-            <template #input="{ row }">
-              <el-input-number
-                v-if="row.isTarget"
-                v-model="model[row.id]"
-                :min="0"
-              />
-            </template>
-          </Table>
+          <record-table :list="detail.childrenList" :value="model" />
         </el-collapse-item>
       </template>
     </el-collapse>
@@ -44,18 +27,23 @@ import {
   useStore,
   watch,
 } from '@nuxtjs/composition-api'
+import { cloneDeep, get, isNil, omitBy, each } from 'lodash'
+import RecordTable, { getPath } from './record-table.vue'
 
 export default defineComponent({
+  components: { RecordTable },
   setup(_props: any, ctx: any) {
     const store = useStore()
     const router = useRouter()
     const route = useRoute()
-    const model = reactive({})
-    store.dispatch('menu/fetchMenus', ctx.root)
+    store.dispatch('menu/fetchMenus')
     const menus = computed(() =>
       store.getters['menu/menusWithRoute'](route.value.params.home)
     )
-    const details = computed(() => store.getters['record-inject/details'])
+    const details = computed(() =>
+      cloneDeep(store.getters['record-inject/details'])
+    )
+    const model = reactive({})
 
     watch([menus, route], ([newMenus, newRoute]) => {
       const { main, home } = newRoute.params
@@ -65,30 +53,32 @@ export default defineComponent({
       if (main) {
         store.dispatch('record-inject/fetchDetails', {
           chapterId: main,
-          $http: ctx.root.$http,
-          $loading: ctx.root.$loading,
         })
       }
     })
 
-    const columns = [
-      {
-        prop: 'name',
-      },
-      {
-        prop: 'input',
-        align: 'center',
-        width: '200',
-      },
-    ]
-
     const doSubmit = () => {
-      console.log(model)
+      const newModel = omitBy(model, isNil)
+      const payload: any[] = []
+      each(newModel, (_v, k) => {
+        const keys = k.split('-')
+        const result: any[] = []
+        getPath(details.value, keys, 0, result)
+
+        const { name, val, chapterId, accessId } = get(details.value, result)
+        payload.push({
+          name,
+          val,
+          chapterId,
+          generalChapterId: accessId.split('-')[0],
+          reportId: 0,
+        })
+      })
+      store.dispatch('record-inject/saveTargets', payload)
     }
 
     return {
       details,
-      columns,
       model,
       doSubmit,
     }

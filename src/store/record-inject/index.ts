@@ -1,4 +1,4 @@
-import { ActionTree, MutationTree, GetterTree } from 'vuex'
+import { MutationTree, GetterTree } from 'vuex'
 
 const state = () => ({
   details: [] as Record<string, any>[]
@@ -20,7 +20,8 @@ function doInChildrenList(arr: any[]) {
         item.childrenList = item.targets.map((t: any) => ({
           ...t,
           isTarget: true,
-          id: `target-${t.id}`
+          id: t.accessId,
+          originId: t.id
         }))
       } else {
         item.childrenList = []
@@ -37,20 +38,36 @@ const getters: GetterTree<RootState, RootState> = {
   details: (state: RootState) => state.details
 }
 
-const actions: ActionTree<RootState, RootState> = {
+const actions: any = {
   async fetchDetails(
     { commit }: Record<string, any>,
-    { $http, $loading, chapterId }: Record<string, any>
+    { chapterId }: Record<string, any>
   ) {
     try {
-      $loading.start()
-      const details = await $http
+      // this.$loading.start()
+      const details = await this.$http
         .$get(`/target/listDetailChapter?chapterId=${chapterId}&reportId=0`)
         .then((res: any) => res.data)
-        .finally(() => $loading.finish())
+      // .finally(() => this.$loading.finish())
       if (details?.length) {
         commit('setDetails', details)
       }
+    } catch (error) {
+      throw new Error(error)
+    }
+  },
+  async saveTargets(
+    _store: Record<string, any>,
+    payload: any[]
+  ) {
+    try {
+      // this.$loading.start()
+      await this.$http
+        .$post('target/saveTarget', payload)
+        .then(() => {
+          this.$message.success('提交成功')
+        })
+      // .finally(() => this.$loading.finish())
     } catch (error) {
       throw new Error(error)
     }

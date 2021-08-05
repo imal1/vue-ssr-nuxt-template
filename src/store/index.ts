@@ -1,4 +1,4 @@
-import { ActionTree, MutationTree, GetterTree } from 'vuex'
+import { MutationTree, GetterTree } from 'vuex'
 
 const state = () => ({
   routes: [] as Record<string, any>[]
@@ -19,13 +19,12 @@ const getters: GetterTree<RootState, RootState> = {
   }))
 }
 
-const actions: ActionTree<RootState, RootState> = {
+const actions: any = {
   async fetchRoutes(
     { commit }: Record<string, any>,
-    { $http }: Record<string, any>
   ) {
     try {
-      const routes = await $http
+      const routes = await this.$http
         .$get('/menus/getMenus')
         .then((res: any) => res.data)
       if (!routes?.length) {

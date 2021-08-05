@@ -4,7 +4,7 @@
 
 <script lang="ts">
 import { defineComponent } from '@nuxtjs/composition-api'
-import RecordInjectPage from './-record-inject.vue'
+import RecordInjectPage from './-record-inject/index.vue'
 
 export default defineComponent({
   components: { RecordInjectPage },

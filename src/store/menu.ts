@@ -1,4 +1,4 @@
-import { ActionTree, MutationTree, GetterTree } from 'vuex'
+import { MutationTree, GetterTree } from 'vuex'
 
 const state = () => ({
   menus: [] as Record<string, any>[]
@@ -25,13 +25,12 @@ const getters: GetterTree<RootState, RootState> = {
   }
 }
 
-const actions: ActionTree<RootState, RootState> = {
+const actions: any = {
   async fetchMenus(
     { commit }: Record<string, any>,
-    { $http }: Record<string, any>
   ) {
     try {
-      const menus = await $http.$get('/target/listTopChapter')
+      const menus = await this.$http.$get('/target/listTopChapter')
         .then((res: { data: any }) => res.data)
       if (menus.length) {
         commit('setMenus', menus)

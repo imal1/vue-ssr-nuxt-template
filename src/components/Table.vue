@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-table :data="data" v-bind="attrs" v-on="events">
+    <el-table :data="data" v-bind="$attrs">
       <template v-for="(col, index) in columns">
         <el-table-column v-bind="col" :key="index">
           <template #default="{ row, column, $index }">
@@ -52,6 +52,7 @@ export default defineComponent({
     watch(ctx.attrs, (newAttrs) => {
       events.value = pickBy(newAttrs, isFunction)
       attrs.value = omit(newAttrs, keys(events.value))
+      console.log(events.value, attrs.value)
     })
 
     return {
