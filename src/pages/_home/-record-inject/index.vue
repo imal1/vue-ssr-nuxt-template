@@ -32,7 +32,7 @@ import RecordTable, { getPath } from './record-table.vue'
 
 export default defineComponent({
   components: { RecordTable },
-  setup(_props: any, ctx: any) {
+  setup(_props: any) {
     const store = useStore()
     const router = useRouter()
     const route = useRoute()
@@ -60,12 +60,12 @@ export default defineComponent({
     const doSubmit = () => {
       const newModel = omitBy(model, isNil)
       const payload: any[] = []
-      each(newModel, (_v, k) => {
+      each(newModel, (val, k) => {
         const keys = k.split('-')
         const result: any[] = []
         getPath(details.value, keys, 0, result)
 
-        const { name, val, chapterId, accessId } = get(details.value, result)
+        const { name, chapterId, accessId } = get(details.value, result)
         payload.push({
           name,
           val,

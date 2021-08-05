@@ -52,7 +52,6 @@ export default defineComponent({
     watch(ctx.attrs, (newAttrs) => {
       events.value = pickBy(newAttrs, isFunction)
       attrs.value = omit(newAttrs, keys(events.value))
-      console.log(events.value, attrs.value)
     })
 
     return {

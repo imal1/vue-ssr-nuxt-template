@@ -25,8 +25,10 @@ export default function ({ $http, $message }: any) {
 
   $http.onResponse(async (_req: any, _options: any, res: any) => {
     const { code, msg } = await res.json()
-    if (process.client && code.toString() !== '200') {
-      $message.error(msg)
+    if (process.client) {
+      if (code.toString() !== '200') {
+        $message.error(msg)
+      }
     }
   })
 
