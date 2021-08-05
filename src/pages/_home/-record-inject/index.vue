@@ -87,3 +87,8 @@ export default defineComponent({
   },
 })
 </script>
+<style lang="postcss" scoped>
+>>> .el-collapse-item__header {
+  font-size: 14px;
+}
+</style>

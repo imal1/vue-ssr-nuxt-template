@@ -63,3 +63,12 @@ export default defineComponent({
   },
 })
 </script>
+<style lang="postcss" scoped>
+>>> .el-table__row.expanded.el-table__row--level-0 {
+  font-size: 13px;
+  color: #303133;
+}
+>>> .el-table__row.el-table__row--level-2 {
+  color: #909399;
+}
+</style>
