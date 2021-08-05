@@ -7,7 +7,7 @@
           :name="detail.id"
           :title="detail.name"
         >
-          <record-table :list="detail.childrenList" :value="model" />
+          <record-table :list="detail.childrenList" />
         </el-collapse-item>
       </template>
     </el-collapse>
@@ -21,14 +21,13 @@
 import {
   computed,
   defineComponent,
-  reactive,
   useRoute,
   useRouter,
   useStore,
   watch,
 } from '@nuxtjs/composition-api'
-import { cloneDeep, get, isNil, omitBy, each } from 'lodash'
-import RecordTable, { getPath } from './record-table.vue'
+import { cloneDeep } from 'lodash'
+import RecordTable from './record-table.vue'
 
 export default defineComponent({
   components: { RecordTable },
@@ -43,7 +42,6 @@ export default defineComponent({
     const details = computed(() =>
       cloneDeep(store.getters['record-inject/details'])
     )
-    const model = reactive({})
 
     watch([menus, route], ([newMenus, newRoute]) => {
       const { main, home } = newRoute.params
@@ -58,28 +56,32 @@ export default defineComponent({
     })
 
     const doSubmit = () => {
-      const newModel = omitBy(model, isNil)
-      const payload: any[] = []
-      each(newModel, (val, k) => {
-        const keys = k.split('-')
-        const result: any[] = []
-        getPath(details.value, keys, 0, result)
-
-        const { name, chapterId, accessId } = get(details.value, result)
-        payload.push({
+      const results: any[] = []
+      const getTargets = (arr: any[]) => {
+        arr.forEach((item: any) => {
+          if (item.targets?.length) {
+            results.push(...item.childrenList.filter((c: any) => c.val))
+          } else {
+            getTargets(item.childrenList)
+          }
+        })
+      }
+      getTargets(details.value)
+      const payload = results.map(
+        ({ name, val, chapterId, originId }: any) => ({
           name,
           val,
           chapterId,
-          generalChapterId: accessId.split('-')[0],
+          id: originId,
+          generalChapterId: route.value.params.main,
           reportId: 0,
         })
-      })
+      )
       store.dispatch('record-inject/saveTargets', payload)
     }
 
     return {
       details,
-      model,
       doSubmit,
     }
   },
