@@ -3,6 +3,7 @@
     border
     stripe
     default-expand-all
+    :indent="42"
     :show-header="false"
     :columns="columns"
     :data="data"
