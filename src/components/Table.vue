@@ -1,5 +1,5 @@
 <template>
-  <div class="space-y-2">
+  <div>
     <el-table :data="data" v-bind="attrs" v-on="events">
       <template v-for="(col, index) in columns">
         <el-table-column v-bind="col" :key="index">
@@ -56,8 +56,8 @@ export default defineComponent({
 
     return {
       attrs,
-      events
+      events,
     }
-  }
+  },
 })
 </script>
