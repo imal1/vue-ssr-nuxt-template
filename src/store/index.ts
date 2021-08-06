@@ -21,7 +21,7 @@ const getters: GetterTree<RootState, RootState> = {
 
 const actions: any = {
   async fetchRoutes(
-    { commit }: Record<string, any>,
+    { commit }: Record<string, any>
   ) {
     try {
       const routes = await this.$http
@@ -35,9 +35,9 @@ const actions: any = {
       throw new Error(error)
     }
   },
-  async nuxtServerInit({ dispatch }: Record<string, any>, context: any) {
+  async nuxtServerInit({ dispatch }: Record<string, any>) {
     // https://zh.nuxtjs.org/docs/2.x/directory-structure/store#the-nuxtserverinit-action
-    await dispatch('fetchRoutes', context)
+    await dispatch('fetchRoutes')
   },
 }
 

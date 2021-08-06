@@ -1,5 +1,5 @@
 <template>
-  <el-container>
+  <el-container direction="vertical">
     <el-header height="auto">
       <Form
         :ref="formRef"
@@ -16,7 +16,7 @@
         </template>
       </Form>
     </el-header>
-    <el-container>
+    <el-container direction="horizontal">
       <el-aside v-if="treeOptions.length" width="auto">
         <el-tree
           :ref="treeRef"

@@ -61,15 +61,15 @@ export default defineComponent({
       default: () => ({}),
     },
   },
-  setup({ items, values }: any, { attrs }: any) {
+  setup(props: any, { attrs }: any) {
     const root = ref(null)
-    const model = reactive(values)
+    const model = reactive(props.values)
     const formItems = ref([] as any[])
     // 获取表单属性
     const formEvents = pickBy(attrs, isFunction)
     const formAttrs = omit(attrs, keys(formEvents.value))
     // 获取各栏属性
-    formItems.value = items.map((item: any) => {
+    formItems.value = props.items.map((item: any) => {
       const { content, ...otherItem } = item
       const columnEvents = pickBy(otherItem, isFunction)
       const columnAttrs = omit(otherItem, keys(columnEvents.value))
