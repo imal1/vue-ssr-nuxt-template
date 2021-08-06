@@ -8,7 +8,7 @@
 -->
 
 <template>
-  <el-form :ref="root" :model="model" v-bind="formAttrs" v-on="formEvents">
+  <el-form ref="root" :model="model" v-bind="formAttrs" v-on="formEvents">
     <template v-for="item in formItems">
       <el-form-item
         :key="item.columnAttrs['prop']"
@@ -62,7 +62,6 @@ export default defineComponent({
     },
   },
   setup(props: any, { attrs }: any) {
-    const root = ref(null)
     const model = reactive(props.values)
     const formItems = ref([] as any[])
     // 获取表单属性
@@ -85,7 +84,6 @@ export default defineComponent({
     })
 
     return {
-      root,
       model,
       formItems,
       formEvents,

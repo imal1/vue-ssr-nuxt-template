@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-table :data="data" v-bind="$attrs">
+    <el-table ref="tableRef" :data="data" v-bind="$attrs">
       <template v-for="(col, index) in columns">
         <el-table-column v-bind="col" :key="index">
           <template #default="{ row, column, $index }">

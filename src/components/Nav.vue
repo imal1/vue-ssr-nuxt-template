@@ -7,9 +7,9 @@
  * @LastEditTime: 2021-07-15 17:57:18
 -->
 <template>
-  <div id="nav">
+  <div>
     <el-menu
-      :ref="root"
+      ref="root"
       :router="router"
       :default-active="menuIndex"
       mode="horizontal"

@@ -7,7 +7,7 @@
  * @LastEditTime: 2021-07-15 17:33:06
 -->
 <template>
-  <el-menu :ref="root" v-bind="menuAttrs" v-on="menuEvents">
+  <el-menu ref="root" v-bind="menuAttrs" v-on="menuEvents">
     <template v-for="(item, key) in menuList">
       <el-submenu
         v-if="item.children && item.children.length > 0"
@@ -62,7 +62,6 @@ import {
   computed,
   defineComponent,
   PropType,
-  ref,
 } from '@nuxtjs/composition-api'
 import { omit, keys, isFunction, pickBy } from 'lodash'
 import { IMenuItem } from './typings'
@@ -75,13 +74,11 @@ export default defineComponent({
     },
   },
   setup(props: any, ctx: any) {
-    const root = ref(null)
     const menuList = computed(() => props.list)
     const menuEvents = computed(() => pickBy(ctx.attrs, isFunction))
     const menuAttrs = computed(() => omit(ctx.attrs, keys(menuEvents.value)))
 
     return {
-      root,
       menuList,
       menuAttrs,
       menuEvents,
@@ -100,19 +97,3 @@ export default defineComponent({
   line-height: 42px;
 }
 </style>
-
-function keys(value: {}): any {
-  throw new Error('Function not implemented.')
-}
-
-function pickBy(newAttrs: { [x: string]: unknown }, isFunction: any): {} {
-  throw new Error('Function not implemented.')
-}
-
-function omit(newAttrs: { [x: string]: unknown }, arg1: any): {} {
-  throw new Error('Function not implemented.')
-}
-
-function keys(value: {}): any {
-  throw new Error('Function not implemented.')
-}
