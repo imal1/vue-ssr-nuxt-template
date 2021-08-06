@@ -58,7 +58,12 @@
   </el-menu>
 </template>
 <script lang="ts">
-import { computed, defineComponent, PropType, ref, watch } from '@nuxtjs/composition-api'
+import {
+  computed,
+  defineComponent,
+  PropType,
+  ref,
+} from '@nuxtjs/composition-api'
 import { omit, keys, isFunction, pickBy } from 'lodash'
 import { IMenuItem } from './typings'
 
@@ -72,13 +77,8 @@ export default defineComponent({
   setup(props: any, ctx: any) {
     const root = ref(null)
     const menuList = computed(() => props.list)
-    const menuEvents = ref({})
-    const menuAttrs = ref({})
-
-    watch(ctx.attrs, (newAttrs) => {
-      menuEvents.value = pickBy(newAttrs, isFunction)
-      menuAttrs.value = omit(newAttrs, keys(menuEvents.value))
-    })
+    const menuEvents = computed(() => pickBy(ctx.attrs, isFunction))
+    const menuAttrs = computed(() => omit(ctx.attrs, keys(menuEvents.value)))
 
     return {
       root,
