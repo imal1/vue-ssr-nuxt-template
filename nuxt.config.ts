@@ -19,6 +19,9 @@ const config: NuxtConfig = {
   },
 
   srcDir: 'src/',
+  dir: {
+    static: '../public/'
+  },
 
   // Global CSS: https://go.nuxtjs.dev/config-css
   css: [
@@ -89,7 +92,7 @@ const config: NuxtConfig = {
     '/grade': {
       target: 'http://localhost:3000',
       async router() {
-        const hostJSON = await require('./src/static/host.json')
+        const hostJSON = await require('./public/host.json')
         return hostJSON.data
       }
     }
