@@ -35,6 +35,8 @@ export default function ({ $http, $message }: any) {
   $http.onError((error: any) => {
     if (process.client && error.statusCode === 500) {
       $message.error('服务器错误')
+    } else {
+      $message.error(error.message)
     }
     // Tip: error.response will be undefined if the connection dropped to the server
     // Tip: You can use error.response.data to get response message
