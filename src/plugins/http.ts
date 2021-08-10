@@ -1,14 +1,6 @@
 async function getHost($http: any) {
   try {
-    const { host } = await fetch(
-      'http://localhost:3000/host.json',
-      {
-        method: 'GET',
-        headers: {
-          'content-type': 'application/json',
-        },
-      }
-    ).then((res) => res.json())
+    const { host } = await require('../../public/host.json')
 
     $http.setBaseURL(host)
   } catch (error) {
