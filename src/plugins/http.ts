@@ -25,9 +25,16 @@ export default function ({ $http, $message }: any) {
 
   $http.onResponse(async (_req: any, _options: any, res: any) => {
     if (process.client) {
-      const { code, msg } = await res.json()
-      if (code.toString() !== '200') {
-        $message.error(msg)
+      switch (res.status) {
+        case (500): {
+          throw new Error('服务器错误')
+        }
+        default: {
+          const { code, msg } = await res.json()
+          if (code.toString() !== '200') {
+            $message.error(msg)
+          }
+        }
       }
     }
   })
