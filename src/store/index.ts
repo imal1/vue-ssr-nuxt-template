@@ -26,14 +26,14 @@ const getters: GetterTree<RootState, RootState> = {
 
 const actions: any = {
   async fetchRouteList(
-    { commit }: Record<string, any>
+    { commit }: Record<string, any>,
   ) {
     try {
-      const loading = this.$fullLoading()
+      const loading = process.client && this.$fullLoading()
       const routeList = await this.$http
         .$get('/menus/getMenus')
         .then((res: any) => res.data)
-        .finally(() => loading.close())
+        .finally(() => process.client && loading.close())
       if (!routeList?.length) {
         throw new Error('未添加路由数据')
       }
@@ -46,11 +46,11 @@ const actions: any = {
     { commit }: Record<string, any>
   ) {
     try {
-      const loading = this.$fullLoading()
+      const loading = process.client && this.$fullLoading()
       const deptList = await this.$http
         .$get('/targetDept/listTree')
         .then((res: any) => res.data)
-        .finally(() => loading.close())
+        .finally(() => process.client && loading.close())
       commit('setDeptList', deptList)
     } catch (error) {
       throw new Error(error)

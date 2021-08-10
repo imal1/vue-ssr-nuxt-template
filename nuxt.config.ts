@@ -77,6 +77,10 @@ const config: NuxtConfig = {
     transpile: [/^element-ui/],
   },
 
+  ssr: false,
+
+  target: 'static',
+
   typescript: {
     typeCheck: {
       eslint: {
@@ -90,25 +94,14 @@ const config: NuxtConfig = {
   },
 
   http: {
-    proxy: true,
     prefix: '/grade',
     serverTimeout: 10000,
-    clientTimeout: 30000
+    clientTimeout: 30000,
   },
 
   server: {
     port: 3000,
     host: '127.0.0.1'
-  },
-
-  proxy: {
-    '/grade': {
-      target: 'http://localhost:3000',
-      async router() {
-        const hostJSON = await require('./public/host.json')
-        return hostJSON.data
-      }
-    }
   },
 
   vite: {

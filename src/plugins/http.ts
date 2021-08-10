@@ -1,27 +1,23 @@
-// async function getHost($http: any) {
-//   try {
-//     const { code, msg, data } = await fetch(
-//       'http://localhost:3000/host.json',
-//       {
-//         method: 'GET',
-//         headers: {
-//           'content-type': 'application/json',
-//         },
-//       }
-//     ).then((res) => res.json())
+async function getHost($http: any) {
+  try {
+    const { host } = await fetch(
+      'http://localhost:3000/host.json',
+      {
+        method: 'GET',
+        headers: {
+          'content-type': 'application/json',
+        },
+      }
+    ).then((res) => res.json())
 
-//     if (code !== 200 || !data) {
-//       throw new Error(msg || '未知错误')
-//     }
+    $http.setBaseURL(host)
+  } catch (error) {
+    throw new Error(error)
+  }
+}
 
-//     $http.setBaseURL(data)
-//   } catch (error) {
-//     throw new Error(error)
-//   }
-// }
-
-export default function ({ $http, $message }: any) {
-  // await getHost($http)
+export default async function ({ $http, $message }: any) {
+  await getHost($http)
 
   $http.onResponse(async (_req: any, _options: any, res: any) => {
     if (process.client) {
