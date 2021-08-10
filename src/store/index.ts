@@ -29,9 +29,11 @@ const actions: any = {
     { commit }: Record<string, any>
   ) {
     try {
+      const loading = this.$fullLoading()
       const routeList = await this.$http
         .$get('/menus/getMenus')
         .then((res: any) => res.data)
+        .finally(() => loading.close())
       if (!routeList?.length) {
         throw new Error('未添加路由数据')
       }
@@ -44,9 +46,11 @@ const actions: any = {
     { commit }: Record<string, any>
   ) {
     try {
+      const loading = this.$fullLoading()
       const deptList = await this.$http
         .$get('/targetDept/listTree')
         .then((res: any) => res.data)
+        .finally(() => loading.close())
       commit('setDeptList', deptList)
     } catch (error) {
       throw new Error(error)
