@@ -21,7 +21,8 @@ function doInChildrenList(arr: any[]) {
           ...t,
           isTarget: true,
           id: t.accessId,
-          originId: t.id
+          originId: t.id,
+          deptValMap: t.deptValMap || {}
         }))
       } else {
         item.childrenList = []
@@ -51,6 +52,8 @@ const actions: any = {
       // .finally(() => this.$loading.finish())
       if (details?.length) {
         commit('setDetails', details)
+      } else {
+        commit('setDetails', [])
       }
     } catch (error) {
       throw new Error(error)

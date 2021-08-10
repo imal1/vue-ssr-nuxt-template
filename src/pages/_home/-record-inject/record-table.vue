@@ -6,12 +6,17 @@
     :indent="42"
     :show-header="false"
     :columns="columns"
-    :data="data"
+    :data="tableData"
     :tree-props="{ children: 'childrenList' }"
     row-key="id"
   >
     <template #input="{ row }">
-      <el-input-number v-if="row.isTarget" v-model="row.val" :min="0" />
+      <el-input-number
+        v-if="row.isTarget"
+        v-model="row.val"
+        :min="0"
+        :disabled="Object.keys(row.deptValMap).length ? true : false"
+      />
       <span v-else-if="row.type && row.targets">
         {{
           round(
@@ -28,11 +33,32 @@
         }}
       </span>
     </template>
+    <template #extra="{ row }">
+      <ButtonDialog v-if="row.isTarget" :button="{ label: '详细' }">
+        <el-tree default-expand-all :data="deptList" :props="{ label: 'name' }">
+          <template #default="{ node, data }">
+            <div class="flex justify-between w-full leading-28px">
+              <span>{{ node.label }}</span>
+              <el-input-number
+                v-if="node.isLeaf"
+                v-model="row.deptValMap[data.id]"
+                @change="() => doRowSum(row)"
+              />
+            </div>
+          </template>
+        </el-tree>
+        <template #footer>
+          <el-button type="primary" @click="() => doRowClear(row)">
+            清空
+          </el-button>
+        </template>
+      </ButtonDialog>
+    </template>
   </Table>
 </template>
 <script lang="ts">
-import { defineComponent, ref } from '@nuxtjs/composition-api'
-import { round, divide, isNaN } from 'lodash'
+import { defineComponent, ref, useStore } from '@nuxtjs/composition-api'
+import { round, divide, isNaN, values, sum } from 'lodash'
 
 export default defineComponent({
   props: {
@@ -49,17 +75,33 @@ export default defineComponent({
       {
         prop: 'input',
         align: 'center',
-        width: '200',
+        width: '160',
+      },
+      {
+        prop: 'extra',
+        align: 'center',
+        width: '80',
       },
     ]
-    const data = ref(props.list)
+    const store = useStore()
+    const deptList = ref(store.getters.deptList)
+    const tableData = ref(props.list)
+    const doRowClear = (row: any) => {
+      row.deptValMap = {}
+    }
+    const doRowSum = (row: any) => {
+      row.val = sum(values(row.deptValMap))
+    }
 
     return {
-      data,
+      tableData,
       columns,
+      deptList,
       round,
       divide,
       isNaN,
+      doRowClear,
+      doRowSum,
     }
   },
 })
@@ -71,5 +113,8 @@ export default defineComponent({
 }
 >>> .el-table__row.el-table__row--level-2 {
   color: #909399;
+}
+>>> .el-tree-node__content {
+  height: 36px;
 }
 </style>

@@ -26,7 +26,7 @@ import {
   useStore,
   watch,
 } from '@nuxtjs/composition-api'
-import { cloneDeep } from 'lodash'
+import { cloneDeep, map } from 'lodash'
 import RecordTable from './record-table.vue'
 
 export default defineComponent({
@@ -35,9 +35,9 @@ export default defineComponent({
     const store = useStore()
     const router = useRouter()
     const route = useRoute()
-    store.dispatch('menu/fetchMenus')
+    store.dispatch('app/fetchMenus')
     const menus = computed(() =>
-      store.getters['menu/menusWithRoute'](route.value.params.home)
+      store.getters['app/menusWithRoute'](route.value.params.home)
     )
     const details = computed(() =>
       cloneDeep(store.getters['record-inject/details'])
@@ -68,13 +68,19 @@ export default defineComponent({
       }
       getTargets(details.value)
       const payload = results.map(
-        ({ name, val, chapterId, originId }: any) => ({
+        ({ name, val, chapterId, originId, deptValMap }: any) => ({
           name,
           val,
           chapterId,
           id: originId,
-          generalChapterId: route.value.params.main,
           reportId: 0,
+          generalChapterId: route.value.params.main,
+          targetDeptList: map(deptValMap, (val: any, deptId: any) => ({
+            chapterId: originId,
+            deptId,
+            val,
+            reportId: 0,
+          })).filter((item) => item.val),
         })
       )
       store.dispatch('record-inject/saveTargets', payload)

@@ -1,43 +1,61 @@
 import { MutationTree, GetterTree } from 'vuex'
 
 const state = () => ({
-  routes: [] as Record<string, any>[]
+  routeList: [] as Record<string, any>[],
+  deptList: [] as Record<string, any>[]
 })
 
 export type RootState = ReturnType<typeof state>
 
 const mutations: MutationTree<RootState> = {
-  setRoutes(state: Record<string, any>, routes: Array<any>) {
-    state.routes = routes
+  setRouteList(state: Record<string, any>, routeList: Array<any>) {
+    state.routeList = routeList
+  },
+  setDeptList(state: Record<string, any>, deptList: Array<any>) {
+    state.deptList = deptList
   }
 }
 
 const getters: GetterTree<RootState, RootState> = {
-  routesWithPath: (state: RootState) => state.routes.map((d: any) => ({
+  routePathList: (state: RootState) => state.routeList.map((d: any) => ({
     ...d,
     path: d.path ? d.path : d.index
-  }))
+  })),
+  deptList: (state: RootState) => state.deptList
 }
 
 const actions: any = {
-  async fetchRoutes(
+  async fetchRouteList(
     { commit }: Record<string, any>
   ) {
     try {
-      const routes = await this.$http
+      const routeList = await this.$http
         .$get('/menus/getMenus')
         .then((res: any) => res.data)
-      if (!routes?.length) {
+      if (!routeList?.length) {
         throw new Error('未添加路由数据')
       }
-      commit('setRoutes', routes)
+      commit('setRouteList', routeList)
+    } catch (error) {
+      throw new Error(error)
+    }
+  },
+  async fetchDeptList(
+    { commit }: Record<string, any>
+  ) {
+    try {
+      const deptList = await this.$http
+        .$get('/targetDept/listTree')
+        .then((res: any) => res.data)
+      commit('setDeptList', deptList)
     } catch (error) {
       throw new Error(error)
     }
   },
   async nuxtServerInit({ dispatch }: Record<string, any>) {
     // https://zh.nuxtjs.org/docs/2.x/directory-structure/store#the-nuxtserverinit-action
-    await dispatch('fetchRoutes')
+    await dispatch('fetchRouteList')
+    await dispatch('fetchDeptList')
   },
 }
 

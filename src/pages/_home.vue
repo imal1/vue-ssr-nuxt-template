@@ -5,7 +5,7 @@
         <div class="flex-1">
           <img src="~/assets/favicon.png" class="max-h-60px" />
         </div>
-        <Nav :list="routes" />
+        <Nav :list="routeList" />
       </el-header>
     </portal>
     <portal to="aside">
@@ -51,13 +51,13 @@ export default defineComponent({
   setup(_prop: any) {
     const store = useStore()
     const router = useRouter()
-    const routes = ref(store.getters.routesWithPath)
+    const routeList = store.getters.routePathList
     const route = useRoute()
     const defaultActive = ref('')
     const { home, main } = route.value.params
-    const menus = computed(() => store.getters['menu/menusWithRoute'](home))
-    if (!home) {
-      router.replace(`/${routes.value[0].path}`)
+    const menus = computed(() => store.getters['app/menusWithRoute'](home))
+    if (routeList.length && !home) {
+      router.replace(`/${routeList[0].path}`)
     }
 
     onUpdated(() => {
@@ -68,7 +68,7 @@ export default defineComponent({
     })
 
     return {
-      routes,
+      routeList,
       menus,
       defaultActive,
     }

@@ -54,7 +54,8 @@ export default defineComponent({
       visible.value = true
     }
 
-    dialogProps.title = dialogProps.title || buttonProps.label
+    dialogAttrs['title' as any] =
+      dialogAttrs['title' as any] || buttonProps.label
 
     return {
       visible,
