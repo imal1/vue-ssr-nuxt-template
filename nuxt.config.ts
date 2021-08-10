@@ -35,6 +35,7 @@ const config: NuxtConfig = {
     { src: '@/plugins/element-ui', ssr: false },
     { src: '@/plugins/http' },
     { src: '@/plugins/mock' }, // http://mockjs.com
+    { src: '@/plugins/app' },
   ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components

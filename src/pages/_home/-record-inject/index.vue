@@ -76,7 +76,8 @@ export default defineComponent({
           reportId: 0,
           generalChapterId: route.value.params.main,
           targetDeptList: map(deptValMap, (val: any, deptId: any) => ({
-            chapterId: originId,
+            targetId: originId,
+            chapterId,
             deptId,
             val,
             reportId: 0,

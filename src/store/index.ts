@@ -52,11 +52,6 @@ const actions: any = {
       throw new Error(error)
     }
   },
-  async nuxtServerInit({ dispatch }: Record<string, any>) {
-    // https://zh.nuxtjs.org/docs/2.x/directory-structure/store#the-nuxtserverinit-action
-    await dispatch('fetchRouteList')
-    await dispatch('fetchDeptList')
-  },
 }
 
 export default {

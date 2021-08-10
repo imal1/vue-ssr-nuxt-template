@@ -54,7 +54,13 @@
   </div>
 </template>
 <script lang="ts">
-import { defineComponent, ref, PropType, watch } from '@nuxtjs/composition-api'
+import {
+  defineComponent,
+  ref,
+  PropType,
+  watch,
+  computed,
+} from '@nuxtjs/composition-api'
 import { omit, keys, isFunction, pickBy } from 'lodash'
 import { INavItem } from './typings'
 
@@ -73,11 +79,15 @@ export default defineComponent({
   },
   setup(props: any, { attrs }: any) {
     const root = ref(null)
-    const menuList = ref(props.list)
-    const { path, children } = menuList.value[0]
-    const menuIndex = ref(
-      children?.length ? `${path}${children[0].path}` : path
-    )
+    const menuList = computed(() => props.list)
+    const menuIndex = computed(() => {
+      if (menuList.value.length) {
+        const { path, children } = menuList.value[0]
+        return children?.length ? `${path}${children[0].path}` : path
+      } else {
+        return ''
+      }
+    })
     const menuEvents = ref({})
     const menuAttrs = ref({})
 
