@@ -1,15 +1,15 @@
-async function getHost($http: any) {
+async function getHost($http: any, prefix: string) {
   try {
-    const { host } = await require('../../public/host.json')
+    const { host } = await $http.$get('../host.json')
 
-    $http.setBaseURL(host)
+    $http.setBaseURL(`${host}${prefix}`)
   } catch (error) {
     throw new Error(error)
   }
 }
 
-export default async function ({ $http, $message }: any) {
-  await getHost($http)
+export default async function ({ $http, $message, nuxtState }: any) {
+  await getHost($http, nuxtState.config.http.browserBaseURL)
 
   $http.onResponse(async (_req: any, _options: any, res: any) => {
     switch (res.status) {

@@ -48,6 +48,7 @@ import {
 } from '@nuxtjs/composition-api'
 
 export default defineComponent({
+  scrollToTop: true,
   setup(_prop: any) {
     const store = useStore()
     const router = useRouter()
