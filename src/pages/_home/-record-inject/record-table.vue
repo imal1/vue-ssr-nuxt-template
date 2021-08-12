@@ -40,9 +40,18 @@
           label: '详细',
           click: () => click(row),
         }"
-        :dialog="{ beforeClose: () => (row.swapValMap = {}) }"
+        :dialog="{
+          width: '400px',
+          beforeClose: () => (row.swapValMap = {}),
+        }"
       >
-        <el-tree default-expand-all :data="deptList" :props="{ label: 'name' }">
+        <el-tree
+          highlight-current
+          default-expand-all
+          :expand-on-click-node="false"
+          :data="deptList"
+          :props="{ label: 'name' }"
+        >
           <template #default="{ node, data }">
             <div class="flex justify-between w-full leading-28px">
               <span>{{ node.label }}</span>
