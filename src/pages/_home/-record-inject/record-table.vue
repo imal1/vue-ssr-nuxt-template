@@ -15,17 +15,17 @@
         v-if="row.isTarget"
         v-model="row.val"
         :min="0"
-        :disabled="Object.keys(row.deptValMap).length ? true : false"
+        :disabled="!$_.isEmpty(row.deptValMap)"
       />
       <span v-else-if="row.type && row.targets">
         {{
-          round(
-            divide(
-              row.childrenList.find(
-                (c) => c.originId === row.formula.targetIdDe
-              ).val,
+          $_.round(
+            $_.divide(
               row.childrenList.find(
                 (c) => c.originId === row.formula.targetIdMo
+              ).val,
+              row.childrenList.find(
+                (c) => c.originId === row.formula.targetIdDe
               ).val
             ),
             2
@@ -34,22 +34,33 @@
       </span>
     </template>
     <template #extra="{ row }">
-      <ButtonDialog v-if="row.isTarget" :button="{ label: '详细' }">
+      <ButtonDialog
+        v-if="row.isTarget"
+        :button="{
+          label: '详细',
+          click: () => click(row),
+        }"
+        :dialog="{ beforeClose: () => (row.swapValMap = {}) }"
+      >
         <el-tree default-expand-all :data="deptList" :props="{ label: 'name' }">
           <template #default="{ node, data }">
             <div class="flex justify-between w-full leading-28px">
               <span>{{ node.label }}</span>
               <el-input-number
                 v-if="node.isLeaf"
-                v-model="row.deptValMap[data.id]"
-                @change="() => doRowSum(row)"
+                v-model="row.swapValMap[data.id]"
+                :min="0"
               />
             </div>
           </template>
         </el-tree>
-        <template #footer>
-          <el-button type="primary" @click="() => doRowClear(row)">
-            清空
+        <template #footer="{ toggleVisible }">
+          <el-button @click="() => (row.swapValMap = {})">清空</el-button>
+          <el-button
+            type="primary"
+            @click="() => doRowConfirm(row, toggleVisible)"
+          >
+            确定
           </el-button>
         </template>
       </ButtonDialog>
@@ -57,8 +68,12 @@
   </Table>
 </template>
 <script lang="ts">
-import { defineComponent, ref, useStore } from '@nuxtjs/composition-api'
-import { round, divide, isNaN, values, sum } from 'lodash'
+import {
+  computed,
+  defineComponent,
+  ref,
+  useStore,
+} from '@nuxtjs/composition-api'
 
 export default defineComponent({
   props: {
@@ -67,7 +82,8 @@ export default defineComponent({
       required: true,
     },
   },
-  setup(props: any) {
+  setup(props: any, ctx: any) {
+    const { sum, values, compact, cloneDeep } = ctx.root.$_
     const columns = [
       {
         prop: 'name',
@@ -85,23 +101,26 @@ export default defineComponent({
     ]
     const store = useStore()
     const deptList = ref(store.getters.deptList)
-    const tableData = ref(props.list)
-    const doRowClear = (row: any) => {
-      row.deptValMap = {}
+    const tableData = computed(() => props.list)
+    const doRowConfirm = (row: any, toggleDialog: any) => {
+      if (compact(values(row.swapValMap)).length) {
+        row.deptValMap = row.swapValMap
+        row.val = sum(values(row.deptValMap))
+      } else {
+        row.deptValMap = null
+      }
+      toggleDialog(false)
     }
-    const doRowSum = (row: any) => {
-      row.val = sum(values(row.deptValMap))
+    const click = (row: any) => {
+      row.swapValMap = cloneDeep(row.deptValMap) || {}
     }
 
     return {
       tableData,
       columns,
       deptList,
-      round,
-      divide,
-      isNaN,
-      doRowClear,
-      doRowSum,
+      doRowConfirm,
+      click,
     }
   },
 })

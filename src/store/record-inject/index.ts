@@ -22,7 +22,7 @@ function doInChildrenList(arr: any[]) {
           isTarget: true,
           id: t.accessId,
           originId: t.id,
-          deptValMap: t.deptValMap || {}
+          swapValMap: {}
         }))
       } else {
         item.childrenList = []

@@ -9,12 +9,12 @@
       :visible.sync="visible"
       v-on="dialogEvents"
     >
-      <template v-if="!dialogAttrs.title" slot="title">
+      <template v-if="!dialogAttrs.title" #title>
         <slot name="title" />
       </template>
       <slot />
-      <template slot="footer">
-        <slot name="footer" />
+      <template #footer>
+        <slot name="footer" :toggle-visible="toggleVisible" />
       </template>
     </el-dialog>
   </div>
@@ -46,12 +46,15 @@ export default defineComponent({
     const buttonAttrs = omit(buttonProps, keys(buttonEvents))
     const dialogAttrs = omit(dialogProps, keys(dialogEvents))
     const { click } = buttonEvents
+    const toggleVisible = (toVisible: boolean) => {
+      visible.value = toVisible
+    }
 
-    buttonEvents.click = () => {
+    buttonEvents.click = async () => {
       if (click) {
         click()
       }
-      visible.value = true
+      await toggleVisible(true)
     }
 
     dialogAttrs['title' as any] =
@@ -63,6 +66,7 @@ export default defineComponent({
       buttonEvents,
       dialogAttrs,
       dialogEvents,
+      toggleVisible,
     }
   },
 })

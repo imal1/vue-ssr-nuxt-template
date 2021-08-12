@@ -26,12 +26,12 @@ import {
   useStore,
   watch,
 } from '@nuxtjs/composition-api'
-import { cloneDeep, map } from 'lodash'
 import RecordTable from './record-table.vue'
 
 export default defineComponent({
   components: { RecordTable },
-  setup(_props: any) {
+  setup(_props: any, ctx: any) {
+    const { cloneDeep, map } = ctx.root.$_
     const store = useStore()
     const router = useRouter()
     const route = useRoute()
@@ -81,7 +81,7 @@ export default defineComponent({
             deptId,
             val,
             reportId: 0,
-          })).filter((item) => item.val),
+          })).filter((item: any) => item.val),
         })
       )
       store.dispatch('record-inject/saveTargets', payload)
