@@ -1,19 +1,21 @@
 <template>
-  <el-container direction="vertical" class="lg:container lg:mx-auto">
+  <Container direction="vertical" class="lg:container lg:mx-auto">
     <portal-target slim name="header" />
-    <el-container>
+    <Container direction="horizontal">
       <portal-target slim name="aside" />
-      <el-main>
+      <Main>
         <Nuxt />
-      </el-main>
-    </el-container>
+      </Main>
+    </Container>
     <portal-target slim name="footer" />
-  </el-container>
+  </Container>
 </template>
 <script lang="ts">
 import { defineComponent } from '@nuxtjs/composition-api'
+import { Container, Main } from 'element-ui'
 
 export default defineComponent({
+  components: { Container, Main },
   setup() {},
 })
 </script>

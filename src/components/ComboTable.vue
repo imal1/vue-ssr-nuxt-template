@@ -1,8 +1,8 @@
 <template>
-  <el-container>
+  <el-container direction="vertical">
     <el-header height="auto">
       <Form
-        :ref="formRef"
+        ref="formRef"
         inline
         :items="formOptions.items"
         :values="formOptions.values"
@@ -16,17 +16,17 @@
         </template>
       </Form>
     </el-header>
-    <el-container>
+    <el-container direction="horizontal">
       <el-aside v-if="treeOptions.length" width="auto">
         <el-tree
-          :ref="treeRef"
+          ref="treeRef"
           v-bind="treeOptions.treeAttrs"
           v-on="treeOptions.treeEvents"
         />
       </el-aside>
       <el-main>
         <Table
-          :ref="tableRef"
+          ref="tableRef"
           :columns="tableOptions.columns"
           :data="tableOptions.data"
           :pagination="tableOptions.pagination"
@@ -44,12 +44,7 @@
   </el-container>
 </template>
 <script lang="ts">
-import {
-  defineComponent,
-  PropType,
-  reactive,
-  ref,
-} from '@nuxtjs/composition-api'
+import { defineComponent, PropType, reactive } from '@nuxtjs/composition-api'
 import { omit, keys, isFunction, pickBy } from 'lodash'
 import { IFormItem } from './Form.vue'
 import { ITableColumn } from './Table.vue'
@@ -86,9 +81,6 @@ export default defineComponent({
     },
   },
   setup(props: any, { slots }: any) {
-    const formRef = ref(null)
-    const treeRef = ref(null)
-    const tableRef = ref(null)
     const { form, tree, table } = props
     const { items, values, ...otherFormProps } = form
     const { columns, data, pagination, ...otherTableProps } = table
@@ -128,9 +120,6 @@ export default defineComponent({
     })
 
     return {
-      formRef,
-      treeRef,
-      tableRef,
       formOptions,
       treeOptions,
       tableOptions,

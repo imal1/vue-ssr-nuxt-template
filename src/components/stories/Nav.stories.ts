@@ -3,7 +3,7 @@ export default {
   decorators: [() => ({ template: '<el-collapse :value="[1,2]"><story/></el-collapse>' })]
 }
 
-const RouteJSON = require('../../static/routes.json')
+const RouteJSON = require('../../../public/routes.json')
 
 const NavObj: any = (_args: any, { argTypes }: any) => {
   return {

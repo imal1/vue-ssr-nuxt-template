@@ -1,4 +1,5 @@
 import { NuxtConfig } from '@nuxt/types'
+import windiConfig from './windi.config'
 
 const config: NuxtConfig = {
   // Global page headers: https://go.nuxtjs.dev/config-head
@@ -17,8 +18,14 @@ const config: NuxtConfig = {
       { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }
     ]
   },
+  env: {
+    PREFIX: '/grade',
+  },
 
   srcDir: 'src/',
+  dir: {
+    static: '../public/'
+  },
 
   // Global CSS: https://go.nuxtjs.dev/config-css
   css: [
@@ -29,7 +36,9 @@ const config: NuxtConfig = {
   plugins: [
     { src: '@/plugins/inject', ssr: false },
     { src: '@/plugins/element-ui', ssr: false },
-    { src: '@/plugins/mock' }, // http://mockjs.com
+    { src: '@/plugins/axios' },
+    { src: '@/plugins/mock', ssr: true }, // http://lavyun.gitee.io/better-mock
+    { src: '@/plugins/app' },
   ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components
@@ -46,15 +55,16 @@ const config: NuxtConfig = {
     '@nuxtjs/composition-api/module', // https://composition-api.nuxtjs.org,
     '@nuxtjs/eslint-module', // https://go.nuxtjs.dev/eslint
     '@nuxtjs/stylelint-module', // https://go.nuxtjs.dev/stylelint
+    '@nuxtjs/router', // https://github.com/nuxt-community/router-module
     'nuxt-windicss', // https://windicss.org/integrations/nuxt
     'nuxt-build-optimisations', // https://github.com/harlan-zw/nuxt-build-optimisations
   ],
 
   // Modules: https://go.nuxtjs.dev/config-modules
   modules: [
-    '@nuxt/http', // https://http.nuxtjs.org
+    '@nuxtjs/axios', // https://axios.nuxtjs.org
     '@nuxtjs/dayjs', // https://github.com/nuxt-community/dayjs-module
-    // 'nuxt-i18n', // https://i18n.nuxtjs.org
+    'nuxt-i18n', // https://i18n.nuxtjs.org
     '@nuxt/image', // https://image.nuxtjs.org
     'nuxt-precompress', // https://github.com/frenchrabbit/nuxt-precompress
     '@luxdamore/nuxt-prune-html', // https://luxdamore.github.io/nuxt-prune-html
@@ -71,6 +81,10 @@ const config: NuxtConfig = {
     transpile: [/^element-ui/],
   },
 
+  ssr: false,
+
+  target: 'static',
+
   typescript: {
     typeCheck: {
       eslint: {
@@ -79,24 +93,31 @@ const config: NuxtConfig = {
     }
   },
 
-  http: {
-    proxy: true,
-    prefix: '/api'
+  loading: {
+    color: (windiConfig.theme?.colors as any).success
   },
 
-  proxy: {
-    '/api': {
-      target: 'http://localhost:3000',
-      pathRewrite: { '^/api': '' },
-      async router() {
-        const hostJSON = await require('./src/static/host.json')
-        return hostJSON.data
-      }
-    }
+  axios: {
+    prefix: process.env.PREFIX,
+    // proxy: true
+  },
+
+  // proxy: {
+  //   '/grade': {
+  //     target: 'http://localhost:3000',
+  //     // async router() {
+  //     //   const hostJSON = await require('./public/host.json')
+  //     //   return hostJSON.data
+  //     // }
+  //   }
+  // },
+
+  server: {
+    port: 3000,
+    host: '127.0.0.1'
   },
 
   vite: {
-    ssr: true,
     optimizeDeps: {
       include: [
         'cookie'
@@ -105,19 +126,18 @@ const config: NuxtConfig = {
   },
 
   i18n: {
-    locales: ['zh', 'en'],
-    defaultLocale: 'zh',
-    vueI18n: {
-      fallbackLocale: 'zh',
-      messages: {
-        zh: {
-          welcome: '您好'
-        },
-        en: {
-          welcome: 'Welcome'
-        }
+    locales: [
+      {
+        code: 'en',
+        file: 'en-US.ts'
+      }, {
+        code: 'zh',
+        file: 'zh-CN.ts'
       }
-    }
+    ],
+    defaultLocale: 'zh',
+    lazy: true,
+    langDir: 'lang/'
   }
 }
 

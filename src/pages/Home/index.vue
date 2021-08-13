@@ -5,21 +5,21 @@
         <div class="flex-1">
           <img src="~/assets/favicon.png" class="max-h-60px" />
         </div>
-        <Nav :list="routes" />
+        <Nav :list="routeList" />
       </el-header>
     </portal>
     <portal to="aside">
-      <el-aside class="<lg:w-auto lg:w-200px">
+      <el-aside v-if="menus.length" class="<lg:w-auto lg:w-200px">
         <Menu
           router
           :list="menus"
-          :default-active="route.params.main"
-          class="my-7px"
+          :default-active="defaultActive"
+          class="h-full"
         />
       </el-aside>
     </portal>
     <portal to="footer">
-      <el-footer />
+      <!-- <el-footer /> -->
     </portal>
     <el-container direction="vertical">
       <!-- <el-header height="20px" class="px-0">
@@ -39,6 +39,8 @@
 import {
   computed,
   defineComponent,
+  getCurrentInstance,
+  onUpdated,
   ref,
   useRoute,
   useRouter,
@@ -46,23 +48,30 @@ import {
 } from '@nuxtjs/composition-api'
 
 export default defineComponent({
+  scrollToTop: true,
   setup(_prop: any) {
-    const { state }: any = useStore()
+    const store = useStore()
     const router = useRouter()
-    const route = useRoute().value
-    const routes = ref(
-      state.routes.map((route: Record<string, any>) => ({
-        ...route,
-        index: route.path,
-      }))
-    )
-    const menus = computed(() => state.menu.menus)
-    router.replace(`/${routes.value[0].path}`)
+    const routeList = store.getters.routePathList
+    const route = useRoute()
+    const defaultActive = ref('')
+    const { home, main } = route.value.params
+    const menus = computed(() => store.getters['app/menusWithRoute'](home))
+    if (routeList.length && !home) {
+      router.replace(`/${routeList[0].path}`)
+    }
+
+    onUpdated(() => {
+      const { data }: any = getCurrentInstance()
+      if (data.defaultActive !== main) {
+        data.defaultActive = main
+      }
+    })
 
     return {
-      routes,
-      route,
+      routeList,
       menus,
+      defaultActive,
     }
   },
 })
