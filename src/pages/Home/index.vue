@@ -9,7 +9,7 @@
       </el-header>
     </portal>
     <portal to="aside">
-      <el-aside class="<lg:w-auto lg:w-200px">
+      <el-aside v-if="menus.length" class="<lg:w-auto lg:w-200px">
         <Menu
           router
           :list="menus"

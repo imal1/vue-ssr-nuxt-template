@@ -1,14 +1,18 @@
 import { MutationTree, GetterTree } from 'vuex'
 
 const state = () => ({
-  details: [] as Record<string, any>[]
+  detailList: [] as Record<string, any>[],
+  recordList: [] as Record<string, any>[]
 })
 
 export type RootState = ReturnType<typeof state>
 
 const mutations: MutationTree<RootState> = {
-  setDetails(state: Record<string, any>, details: Array<any>) {
-    state.details = doInChildrenList(details)
+  setDetailList(state: Record<string, any>, detailList: Array<any>) {
+    state.detailList = doInChildrenList(detailList)
+  },
+  setRecordList(state: Record<string, any>, recordList: Array<any>) {
+    state.recordList = recordList
   }
 }
 
@@ -36,24 +40,25 @@ function doInChildrenList(arr: any[]) {
 }
 
 const getters: GetterTree<RootState, RootState> = {
-  details: (state: RootState) => state.details
+  detailList: (state: RootState) => state.detailList,
+  recordList: (state: RootState) => state.recordList
 }
 
 const actions: any = {
-  async fetchDetails(
+  async fetchDetailList(
     { commit }: Record<string, any>,
     { chapterId }: Record<string, any>
   ) {
     try {
       // this.$loading.start()
-      const details = await this.$http
+      const detailList = await this.$axios
         .$get(`/target/listDetailChapter?chapterId=${chapterId}&reportId=0`)
         .then((res: any) => res.data)
       // .finally(() => this.$loading.finish())
-      if (details?.length) {
-        commit('setDetails', details)
+      if (detailList?.length) {
+        commit('setDetailList', detailList)
       } else {
-        commit('setDetails', [])
+        commit('setDetailList', [])
       }
     } catch (error) {
       throw new Error(error)
@@ -65,12 +70,27 @@ const actions: any = {
   ) {
     try {
       // this.$loading.start()
-      await this.$http
+      await this.$axios
         .$post('target/saveTarget', payload)
         .then(() => {
           this.$message.success('提交成功')
         })
       // .finally(() => this.$loading.finish())
+    } catch (error) {
+      throw new Error(error)
+    }
+  },
+  async fetchRecordList(
+    { commit }: Record<string, any>
+  ) {
+    try {
+      const recordList = await this.$axios
+        .$get('targetRecord/listDataRecord')
+      if (recordList?.length) {
+        commit('setRecordList', recordList)
+      } else {
+        commit('setRecordList', [])
+      }
     } catch (error) {
       throw new Error(error)
     }

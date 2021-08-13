@@ -1,7 +1,7 @@
 <template>
   <div>
-    <el-collapse class="w-full" :value="details.map((d) => d.id)">
-      <template v-for="detail in details">
+    <el-collapse class="w-full" :value="detailList.map((d) => d.id)">
+      <template v-for="detail in detailList">
         <el-collapse-item
           :key="detail.id"
           :name="detail.id"
@@ -39,8 +39,8 @@ export default defineComponent({
     const menus = computed(() =>
       store.getters['app/menusWithRoute'](route.value.params.home)
     )
-    const details = computed(() =>
-      cloneDeep(store.getters['record-inject/details'])
+    const detailList = computed(() =>
+      cloneDeep(store.getters['RecordFill/detailList'])
     )
 
     watch([menus, route], ([newMenus, newRoute]) => {
@@ -49,7 +49,7 @@ export default defineComponent({
         router.replace(newMenus[0].route)
       }
       if (main) {
-        store.dispatch('record-inject/fetchDetails', {
+        store.dispatch('RecordFill/fetchDetailList', {
           chapterId: main,
         })
       }
@@ -66,7 +66,7 @@ export default defineComponent({
           }
         })
       }
-      getTargets(details.value)
+      getTargets(detailList.value)
       const payload = results.map(
         ({ name, val, chapterId, originId, deptValMap }: any) => ({
           name,
@@ -84,11 +84,11 @@ export default defineComponent({
           })).filter((item: any) => item.val),
         })
       )
-      store.dispatch('record-inject/saveTargets', payload)
+      store.dispatch('RecordFill/saveTargets', payload)
     }
 
     return {
-      details,
+      detailList,
       doSubmit,
     }
   },

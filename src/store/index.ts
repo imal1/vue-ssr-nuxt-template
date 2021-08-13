@@ -30,9 +30,8 @@ const actions: any = {
   ) {
     try {
       const loading = process.client && this.$fullLoading()
-      const routeList = await this.$http
+      const routeList = await this.$axios
         .$get('/menus/getMenus')
-        .then((res: any) => res.data)
         .finally(() => process.client && loading.close())
       if (!routeList?.length) {
         throw new Error('未添加路由数据')
@@ -47,9 +46,8 @@ const actions: any = {
   ) {
     try {
       const loading = process.client && this.$fullLoading()
-      const deptList = await this.$http
+      const deptList = await this.$axios
         .$get('/targetDept/listTree')
-        .then((res: any) => res.data)
         .finally(() => process.client && loading.close())
       commit('setDeptList', deptList)
     } catch (error) {

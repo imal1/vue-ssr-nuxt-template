@@ -31,8 +31,7 @@ const actions: any = {
   ) {
     try {
       const loading = this.$fullLoading()
-      const menus = await this.$http.$get('/target/listTopChapter')
-        .then((res: { data: any }) => res.data)
+      const menus = await this.$axios.$get('/target/listTopChapter')
         .finally(() => loading.close())
       if (menus.length) {
         commit('setMenus', menus)
