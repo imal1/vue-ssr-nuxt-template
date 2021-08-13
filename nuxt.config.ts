@@ -19,7 +19,7 @@ const config: NuxtConfig = {
     ]
   },
   env: {
-    PREFIX: '/grade',
+    PREFIX: '/api',
   },
 
   srcDir: 'src/',

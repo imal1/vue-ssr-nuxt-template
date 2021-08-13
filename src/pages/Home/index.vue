@@ -9,10 +9,10 @@
       </el-header>
     </portal>
     <portal to="aside">
-      <el-aside v-if="menus.length" class="<lg:w-auto lg:w-200px">
+      <el-aside v-if="menuList.length" class="<lg:w-auto lg:w-200px">
         <Menu
           router
-          :list="menus"
+          :list="menuList"
           :default-active="defaultActive"
           class="h-full"
         />
@@ -56,7 +56,7 @@ export default defineComponent({
     const route = useRoute()
     const defaultActive = ref('')
     const { home, main } = route.value.params
-    const menus = computed(() => store.getters['app/menusWithRoute'](home))
+    const menuList = computed(() => store.getters.menuRouteList(home))
     if (routeList.length && !home) {
       router.replace(`/${routeList[0].path}`)
     }
@@ -70,7 +70,7 @@ export default defineComponent({
 
     return {
       routeList,
-      menus,
+      menuList,
       defaultActive,
     }
   },

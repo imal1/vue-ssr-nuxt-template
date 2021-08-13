@@ -17,16 +17,4 @@ export default function (ctx: any) {
       ]
     }
   })
-  Mock.mock(`${baseURL}/targetDept/listTree`, function () {
-    return {
-      code: 200,
-      msg: "",
-      data: [
-        {
-          id: 1,
-          name: '333'
-        }
-      ]
-    }
-  })
 }
