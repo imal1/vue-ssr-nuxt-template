@@ -56,7 +56,7 @@ export default defineComponent({
     const route = useRoute()
     const defaultActive = ref('')
     const { home, main } = route.value.params
-    const menus = computed(() => store.getters['app/menusWithRoute'](home))
+    const menus = computed(() => store.getters.menuRouteList(home))
     if (routeList.length && !home) {
       router.replace(`/${routeList[0].path}`)
     }

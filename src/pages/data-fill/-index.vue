@@ -1,19 +1,22 @@
 <template>
-  <div>
-    <el-collapse class="w-full" :value="details.map((d) => d.id)">
-      <template v-for="detail in details">
+  <div class="app-data-fill">
+    <el-collapse class="w-full" :value="detailList.map((d) => d.id)">
+      <template v-for="detail in detailList">
         <el-collapse-item
           :key="detail.id"
           :name="detail.id"
           :title="detail.name"
         >
-          <record-table :list="detail.childrenList" />
+          <data-table :list="detail.childrenList" />
         </el-collapse-item>
       </template>
     </el-collapse>
     <div class="flex justify-center mt-20px">
       <el-button type="primary" @click="doSubmit">提交</el-button>
     </div>
+    <el-timeline>
+      <el-timeline-item></el-timeline-item>
+    </el-timeline>
   </div>
 </template>
 
@@ -26,21 +29,21 @@ import {
   useStore,
   watch,
 } from '@nuxtjs/composition-api'
-import RecordTable from './record-table.vue'
+import DataTable from './-data-table.vue'
 
 export default defineComponent({
-  components: { RecordTable },
+  components: { DataTable },
   setup(_props: any, ctx: any) {
     const { cloneDeep, map } = ctx.root.$_
     const store = useStore()
     const router = useRouter()
     const route = useRoute()
-    store.dispatch('app/fetchMenus')
+    store.dispatch('fetchMenuList')
     const menus = computed(() =>
-      store.getters['app/menusWithRoute'](route.value.params.home)
+      store.getters.menuRouteList(route.value.params.home)
     )
-    const details = computed(() =>
-      cloneDeep(store.getters['record-inject/details'])
+    const detailList = computed(() =>
+      cloneDeep(store.getters['data-fill/detailList'])
     )
 
     watch([menus, route], ([newMenus, newRoute]) => {
@@ -49,7 +52,7 @@ export default defineComponent({
         router.replace(newMenus[0].route)
       }
       if (main) {
-        store.dispatch('record-inject/fetchDetails', {
+        store.dispatch('data-fill/fetchDetailList', {
           chapterId: main,
         })
       }
@@ -66,7 +69,7 @@ export default defineComponent({
           }
         })
       }
-      getTargets(details.value)
+      getTargets(detailList.value)
       const payload = results.map(
         ({ name, val, chapterId, originId, deptValMap }: any) => ({
           name,
@@ -84,17 +87,20 @@ export default defineComponent({
           })).filter((item: any) => item.val),
         })
       )
-      store.dispatch('record-inject/saveTargets', payload)
+      store.dispatch('data-fill/saveTargets', payload)
     }
 
     return {
-      details,
+      detailList,
       doSubmit,
     }
   },
 })
 </script>
 <style lang="postcss" scoped>
+.app-data-fill {
+  width: calc(100% - 100px);
+}
 >>> .el-collapse-item__header {
   font-size: 14px;
 }

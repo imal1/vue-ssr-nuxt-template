@@ -18,6 +18,9 @@ const config: NuxtConfig = {
       { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }
     ]
   },
+  env: {
+    PREFIX: '/grade',
+  },
 
   srcDir: 'src/',
   dir: {
@@ -33,8 +36,8 @@ const config: NuxtConfig = {
   plugins: [
     { src: '@/plugins/inject', ssr: false },
     { src: '@/plugins/element-ui', ssr: false },
-    { src: '@/plugins/http' },
-    { src: '@/plugins/mock' }, // http://mockjs.com
+    { src: '@/plugins/axios' },
+    { src: '@/plugins/mock', ssr: true }, // http://lavyun.gitee.io/better-mock
     { src: '@/plugins/app' },
   ],
 
@@ -58,7 +61,7 @@ const config: NuxtConfig = {
 
   // Modules: https://go.nuxtjs.dev/config-modules
   modules: [
-    '@nuxt/http', // https://http.nuxtjs.org
+    '@nuxtjs/axios', // https://axios.nuxtjs.org
     '@nuxtjs/dayjs', // https://github.com/nuxt-community/dayjs-module
     // 'nuxt-i18n', // https://i18n.nuxtjs.org
     '@nuxt/image', // https://image.nuxtjs.org
@@ -93,11 +96,20 @@ const config: NuxtConfig = {
     color: (windiConfig.theme?.colors as any).success
   },
 
-  http: {
-    prefix: '/grade',
-    serverTimeout: 10000,
-    clientTimeout: 30000,
+  axios: {
+    prefix: process.env.PREFIX,
+    // proxy: true
   },
+
+  // proxy: {
+  //   '/grade': {
+  //     target: 'http://localhost:3000',
+  //     // async router() {
+  //     //   const hostJSON = await require('./public/host.json')
+  //     //   return hostJSON.data
+  //     // }
+  //   }
+  // },
 
   server: {
     port: 3000,
@@ -105,7 +117,6 @@ const config: NuxtConfig = {
   },
 
   vite: {
-    ssr: true,
     optimizeDeps: {
       include: [
         'cookie'
@@ -114,19 +125,18 @@ const config: NuxtConfig = {
   },
 
   i18n: {
-    locales: ['zh', 'en'],
-    defaultLocale: 'zh',
-    vueI18n: {
-      fallbackLocale: 'zh',
-      messages: {
-        zh: {
-          welcome: '您好'
-        },
-        en: {
-          welcome: 'Welcome'
-        }
+    locales: [
+      {
+        code: 'en',
+        file: 'en-US.ts'
+      }, {
+        code: 'zh',
+        file: 'zh-CN.ts'
       }
-    }
+    ],
+    defaultLocale: 'zh',
+    lazy: true,
+    langDir: 'lang/'
   }
 }
 
