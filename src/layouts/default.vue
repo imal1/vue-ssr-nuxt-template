@@ -3,7 +3,7 @@
     <portal-target slim name="header" />
     <Container direction="horizontal">
       <portal-target slim name="aside" />
-      <Main>
+      <Main class="p-0">
         <Nuxt />
       </Main>
     </Container>
@@ -19,8 +19,3 @@ export default defineComponent({
   setup() {},
 })
 </script>
-<style lang="postcss" scoped>
-.el-container .el-container {
-  height: calc(100vh - 60px);
-}
-</style>

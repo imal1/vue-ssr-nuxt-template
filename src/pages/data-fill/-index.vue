@@ -1,22 +1,32 @@
 <template>
-  <div class="app-data-fill">
-    <el-collapse class="w-full" :value="detailList.map((d) => d.id)">
-      <template v-for="detail in detailList">
-        <el-collapse-item
-          :key="detail.id"
-          :name="detail.id"
-          :title="detail.name"
-        >
-          <data-table :list="detail.childrenList" />
-        </el-collapse-item>
-      </template>
-    </el-collapse>
-    <div class="flex justify-center mt-20px">
-      <el-button type="primary" @click="doSubmit">提交</el-button>
+  <div class="app-data-fill flex">
+    <div class="flex-1 mx-10px px-10px pb-20px overflow-y-auto">
+      <el-collapse class="w-full" :value="detailList.map((d) => d.id)">
+        <template v-for="detail in detailList">
+          <el-collapse-item
+            :key="detail.id"
+            :name="detail.id"
+            :title="detail.name"
+          >
+            <data-table :list="detail.childrenList" />
+          </el-collapse-item>
+        </template>
+      </el-collapse>
+      <div class="flex justify-center mt-20px">
+        <el-button type="primary" @click="doSubmit">提交</el-button>
+      </div>
     </div>
-    <el-timeline>
-      <el-timeline-item></el-timeline-item>
-    </el-timeline>
+    <div class="w-100px flex items-center -mt-60px">
+      <el-timeline class="m-0 p-0">
+        <el-timeline-item
+          v-for="record in recordList"
+          :key="record.id"
+          :timestamp="`${record.reportYear}-${record.reportMonth}`"
+        >
+          {{ record.orgCode }} {{ record.orgName }}
+        </el-timeline-item>
+      </el-timeline>
+    </div>
   </div>
 </template>
 
@@ -39,12 +49,14 @@ export default defineComponent({
     const router = useRouter()
     const route = useRoute()
     store.dispatch('fetchMenuList')
+    store.dispatch('data-fill/fetchRecordList')
     const menus = computed(() =>
       store.getters.menuRouteList(route.value.params.home)
     )
     const detailList = computed(() =>
       cloneDeep(store.getters['data-fill/detailList'])
     )
+    const recordList = computed(() => store.getters['data-fill/recordList'])
 
     watch([menus, route], ([newMenus, newRoute]) => {
       const { main, home } = newRoute.params
@@ -92,16 +104,17 @@ export default defineComponent({
 
     return {
       detailList,
+      recordList,
       doSubmit,
     }
   },
 })
 </script>
-<style lang="postcss" scoped>
+<style lang="scss" scoped>
 .app-data-fill {
-  width: calc(100% - 100px);
-}
->>> .el-collapse-item__header {
-  font-size: 14px;
+  height: calc(100vh - 60px);
+  >>> .el-collapse-item__header {
+    font-size: 14px;
+  }
 }
 </style>

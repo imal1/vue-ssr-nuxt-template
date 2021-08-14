@@ -1,7 +1,8 @@
 import { MutationTree, GetterTree } from 'vuex'
 
 const state = () => ({
-  detailList: [] as Record<string, any>[]
+  detailList: [] as Record<string, any>[],
+  recordList: [] as Record<string, any>[]
 })
 
 export type RootState = ReturnType<typeof state>
@@ -9,6 +10,9 @@ export type RootState = ReturnType<typeof state>
 const mutations: MutationTree<RootState> = {
   setDetailList(state: Record<string, any>, detailList: Array<any>) {
     state.detailList = doInChildrenList(detailList)
+  },
+  setRecordList(state: Record<string, any>, recordList: Array<any>) {
+    state.recordList = recordList
   }
 }
 
@@ -36,19 +40,33 @@ function doInChildrenList(arr: any[]) {
 }
 
 const getters: GetterTree<RootState, RootState> = {
-  detailList: (state: RootState) => state.detailList
+  detailList: (state: RootState) => state.detailList,
+  recordList: (state: RootState) => state.recordList,
 }
 
 const actions: any = {
+  async fetchRecordList(
+    { commit }: Record<string, any>,
+  ) {
+    try {
+      const loading = process.client && this.$fullLoading()
+      const recordList = await this.$axios
+        .$get('/targetRecord/listDataRecord')
+        .finally(() => process.client && loading.close())
+      commit('setRecordList', recordList)
+    } catch (error) {
+      throw new Error(error)
+    }
+  },
   async fetchDetailList(
     { commit }: Record<string, any>,
     { chapterId }: Record<string, any>
   ) {
     try {
-      // this.$loading.start()
+      const loading = process.client && this.$fullLoading()
       const detailList = await this.$axios
         .$get(`/target/listDetailChapter?chapterId=${chapterId}&reportId=0`)
-      // .finally(() => this.$loading.finish())
+        .finally(() => process.client && loading.close())
       if (detailList?.length) {
         commit('setDetailList', detailList)
       } else {
@@ -63,13 +81,13 @@ const actions: any = {
     payload: any[]
   ) {
     try {
-      // this.$loading.start()
+      const loading = process.client && this.$fullLoading()
       await this.$axios
         .$post('target/saveTarget', payload)
         .then(() => {
           this.$message.success('提交成功')
         })
-      // .finally(() => this.$loading.finish())
+        .finally(() => process.client && loading.close())
     } catch (error) {
       throw new Error(error)
     }

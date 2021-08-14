@@ -134,7 +134,7 @@ export default defineComponent({
   },
 })
 </script>
-<style lang="postcss" scoped>
+<style lang="scss" scoped>
 >>> .el-table__row.expanded.el-table__row--level-0 {
   font-size: 13px;
   color: #303133;
