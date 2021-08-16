@@ -29,8 +29,14 @@ const config: NuxtConfig = {
 
   // Global CSS: https://go.nuxtjs.dev/config-css
   css: [
-    '@/theme/element-variables.scss'
+    '@/theme/element-ui.scss'
   ],
+
+  styleResources: {
+    scss: [
+      '~theme/element-variables.scss'
+    ]
+  },
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
   plugins: [
@@ -56,6 +62,7 @@ const config: NuxtConfig = {
     '@nuxtjs/eslint-module', // https://go.nuxtjs.dev/eslint
     '@nuxtjs/stylelint-module', // https://go.nuxtjs.dev/stylelint
     'nuxt-windicss', // https://windicss.org/integrations/nuxt
+    '@nuxtjs/style-resources', // https://github.com/nuxt-community/style-resources-module
     'nuxt-build-optimisations', // https://github.com/harlan-zw/nuxt-build-optimisations
   ],
 
