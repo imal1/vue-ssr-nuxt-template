@@ -32,6 +32,7 @@
             <el-menu-item
               :key="subItem.path"
               :index="`${item.path}${subItem.path}`"
+              :route="item.route"
             >
               <template slot="title">
                 <i
@@ -43,7 +44,12 @@
             </el-menu-item>
           </template>
         </el-submenu>
-        <el-menu-item v-else :key="item.path" :index="item.path">
+        <el-menu-item
+          v-else
+          :key="item.path"
+          :index="item.path"
+          :route="item.route"
+        >
           <template slot="title">
             <i v-if="item.icon" :class="`el-icon el-icon-${item.icon}`" />
             {{ item.name }}
