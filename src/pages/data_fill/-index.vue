@@ -35,40 +35,28 @@ import {
   computed,
   defineComponent,
   useRoute,
-  useRouter,
   useStore,
-  watch,
 } from '@nuxtjs/composition-api'
-import DataTable from './-data-table.vue'
+import DataTable from './-data_table.vue'
 
 export default defineComponent({
   components: { DataTable },
   setup(_props: any, ctx: any) {
     const { cloneDeep, map } = ctx.root.$_
     const store = useStore()
-    const router = useRouter()
+    // const router = useRouter()
     const route = useRoute()
-    store.dispatch('fetchMenuList')
-    store.dispatch('data-fill/fetchRecordList')
-    const menus = computed(() =>
-      store.getters.menuRouteList(route.value.params.home)
-    )
+    const subNav = computed(() => route.value.params.sub_nav)
     const detailList = computed(() =>
-      cloneDeep(store.getters['data-fill/detailList'])
+      cloneDeep(store.getters['data_fill/detailList'])
     )
-    const recordList = computed(() => store.getters['data-fill/recordList'])
+    const recordList = computed(() => store.getters['data_fill/recordList'])
 
-    watch([menus, route], ([newMenus, newRoute]) => {
-      const { main, home } = newRoute.params
-      if (home && !main) {
-        router.replace(newMenus[0].route)
-      }
-      if (main) {
-        store.dispatch('data-fill/fetchDetailList', {
-          chapterId: main,
-        })
-      }
-    })
+    if (subNav) {
+      store.dispatch('data_fill/fetchDetailList', {
+        chapterId: subNav.value,
+      })
+    }
 
     const doSubmit = () => {
       const results: any[] = []
@@ -99,7 +87,7 @@ export default defineComponent({
           })).filter((item: any) => item.val),
         })
       )
-      store.dispatch('data-fill/saveTargets', payload)
+      store.dispatch('data_fill/saveTargets', payload)
     }
 
     return {
@@ -112,7 +100,7 @@ export default defineComponent({
 </script>
 <style lang="scss" scoped>
 .app-data-fill {
-  height: calc(100vh - 60px);
+  height: calc(100vh - 90px);
   >>> .el-collapse-item__header {
     font-size: 14px;
   }

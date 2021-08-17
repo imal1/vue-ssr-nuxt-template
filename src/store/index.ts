@@ -17,22 +17,26 @@ const mutations: MutationTree<RootState> = {
   },
   setMenuList(state: Record<string, any>, menuList: Array<any>) {
     state.menuList = menuList
+  },
+  clearMenuList(state: Record<string, any>) {
+    state.menuList = []
   }
 }
 
 const getters: GetterTree<RootState, RootState> = {
   routePathList: (state: RootState) => state.routeList.map((d: any) => ({
     ...d,
-    path: d.path ? d.path : d.index
+    path: d.path ? d.path : d.index,
+    route: `/${d.path ? d.path : d.index}`
   })),
   deptList: (state: RootState) => state.deptList,
   menuRouteList: (state: RootState) => {
-    return (home: string) =>
+    return (prefix?: string) =>
       state.menuList.map((item: any) => {
         item.index = item.index
           ? `${item.index}`
           : `${item.id}`
-        item.route = `/${home}/${item.index}`
+        item.route = prefix ? `/${prefix}/${item.index}` : `${item.index}`
         return item
       })
   }
@@ -44,7 +48,7 @@ const actions: any = {
   ) {
     try {
       const loading = process.client && this.$fullLoading()
-      const routeList = await this.$axios
+      const routeList = await this.$api
         .$get('/menus/getMenus')
         .finally(() => process.client && loading.close())
       if (!routeList?.length) {
@@ -60,7 +64,7 @@ const actions: any = {
   ) {
     try {
       const loading = process.client && this.$fullLoading()
-      const deptList = await this.$axios
+      const deptList = await this.$api
         .$get('/targetDept/listTree')
         .finally(() => process.client && loading.close())
       commit('setDeptList', deptList)
@@ -73,7 +77,7 @@ const actions: any = {
   ) {
     try {
       const loading = this.$fullLoading()
-      const menuList = await this.$axios.$get('/target/listTopChapter')
+      const menuList = await this.$api.$get('/target/listTopChapter')
         .finally(() => loading.close())
       if (menuList.length) {
         commit('setMenuList', menuList)

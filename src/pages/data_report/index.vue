@@ -1,13 +1,12 @@
 <template>
-  <record-inject-page />
+  <div>report</div>
 </template>
-
 <script lang="ts">
 import { defineComponent } from '@nuxtjs/composition-api'
-import RecordInjectPage from '../data-fill/-index.vue'
 
 export default defineComponent({
-  components: { RecordInjectPage },
-  setup() {},
+  setup() {
+
+  },
 })
 </script>

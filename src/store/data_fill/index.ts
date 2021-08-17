@@ -50,7 +50,7 @@ const actions: any = {
   ) {
     try {
       const loading = process.client && this.$fullLoading()
-      const recordList = await this.$axios
+      const recordList = await this.$api
         .$get('/targetRecord/listDataRecord')
         .finally(() => process.client && loading.close())
       commit('setRecordList', recordList)
@@ -63,10 +63,8 @@ const actions: any = {
     { chapterId }: Record<string, any>
   ) {
     try {
-      const loading = process.client && this.$fullLoading()
-      const detailList = await this.$axios
+      const detailList = await this.$api
         .$get(`/target/listDetailChapter?chapterId=${chapterId}&reportId=0`)
-        .finally(() => process.client && loading.close())
       if (detailList?.length) {
         commit('setDetailList', detailList)
       } else {
@@ -82,7 +80,7 @@ const actions: any = {
   ) {
     try {
       const loading = process.client && this.$fullLoading()
-      await this.$axios
+      await this.$api
         .$post('target/saveTarget', payload)
         .then(() => {
           this.$message.success('提交成功')

@@ -1,5 +1,4 @@
 import { NuxtConfig } from '@nuxt/types'
-import windiConfig from './windi.config'
 
 const config: NuxtConfig = {
   // Global page headers: https://go.nuxtjs.dev/config-head
@@ -100,7 +99,7 @@ const config: NuxtConfig = {
   },
 
   loading: {
-    color: (windiConfig.theme?.colors as any).success
+    color: '#67C23A'
   },
 
   axios: {

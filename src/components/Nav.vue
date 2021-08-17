@@ -10,10 +10,8 @@
   <div>
     <el-menu
       ref="root"
-      :router="router"
-      :default-active="menuIndex"
+      router
       mode="horizontal"
-      class="border-none"
       v-bind="menuAttrs"
       v-on="menuEvents"
     >
@@ -32,6 +30,7 @@
             <el-menu-item
               :key="subItem.path"
               :index="`${item.path}${subItem.path}`"
+              :route="item.route"
             >
               <template slot="title">
                 <i
@@ -43,7 +42,12 @@
             </el-menu-item>
           </template>
         </el-submenu>
-        <el-menu-item v-else :key="item.path" :index="item.path">
+        <el-menu-item
+          v-else
+          :key="item.path"
+          :index="item.path"
+          :route="item.route"
+        >
           <template slot="title">
             <i v-if="item.icon" :class="`el-icon el-icon-${item.icon}`" />
             {{ item.name }}
@@ -58,7 +62,6 @@ import {
   defineComponent,
   ref,
   PropType,
-  watch,
   computed,
 } from '@nuxtjs/composition-api'
 import { omit, keys, isFunction, pickBy } from 'lodash'
@@ -77,29 +80,15 @@ export default defineComponent({
       },
     },
   },
-  setup(props: any, { attrs }: any) {
+  setup(props: any, ctx: any) {
     const root = ref(null)
     const menuList = computed(() => props.list)
-    const menuIndex = computed(() => {
-      if (menuList.value.length) {
-        const { path, children } = menuList.value[0]
-        return children?.length ? `${path}${children[0].path}` : path
-      } else {
-        return ''
-      }
-    })
-    const menuEvents = ref({})
-    const menuAttrs = ref({})
-
-    watch(attrs, (newAttrs) => {
-      menuEvents.value = pickBy(newAttrs, isFunction)
-      menuAttrs.value = omit(newAttrs, keys(menuEvents.value))
-    })
+    const menuEvents = pickBy(ctx.attrs, isFunction)
+    const menuAttrs = omit(ctx.attrs, keys(menuEvents.value))
 
     return {
       root,
       menuList,
-      menuIndex,
       menuAttrs,
       menuEvents,
     }
@@ -107,6 +96,9 @@ export default defineComponent({
 })
 </script>
 <style lang="postcss" scoped>
+>>> .el-menu {
+  border-style: none;
+}
 >>> div.el-menu--horizontal {
   margin-left: -10px;
 }

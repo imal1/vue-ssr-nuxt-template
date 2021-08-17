@@ -11,7 +11,7 @@
         </el-table-column>
       </template>
     </el-table>
-    <el-pagination v-if="pagination" background class="text-right" />
+    <el-pagination v-if="pagination" background />
   </div>
 </template>
 <script lang="ts">
@@ -61,3 +61,8 @@ export default defineComponent({
   },
 })
 </script>
+<style lang="postcss" scoped>
+>>> .el-pagination {
+  text-align: right;
+}
+</style>

@@ -2,20 +2,25 @@ import { NuxtAxiosInstance } from "@nuxtjs/axios"
 import { AxiosResponse } from 'axios'
 import { toNumber } from "lodash"
 
-async function getHost($axios: NuxtAxiosInstance) {
+async function getHost(api: NuxtAxiosInstance, $axios: NuxtAxiosInstance) {
   try {
     const { host } = await $axios.$get('../host.json')
 
-    $axios.setBaseURL(`${host}${process.env.PREFIX}`)
+    api.setBaseURL(`${host}${process.env.PREFIX}`)
   } catch (error) {
     throw new Error(error)
   }
 }
 
-export default async function ({ $axios, $message, redirect, error: nuxtError }: any) {
-  await getHost($axios)
+export default async function (
+  { $axios, $message, redirect, error: nuxtError }: any,
+  inject: any
+) {
+  const api = $axios.create()
 
-  $axios.onResponse((res: AxiosResponse) => {
+  await getHost(api, $axios)
+
+  api.onResponse((res: AxiosResponse) => {
     const { data, code, msg } = res.data
     if (toNumber(code) === 200) {
       res.data = data
@@ -24,7 +29,7 @@ export default async function ({ $axios, $message, redirect, error: nuxtError }:
     }
   })
 
-  $axios.onError((error: any) => {
+  api.onError((error: any) => {
     process.client && $message.error(error.message)
     nuxtError({
       statusCode: error.response.status,
@@ -35,4 +40,6 @@ export default async function ({ $axios, $message, redirect, error: nuxtError }:
     // Tip: You can use error.response.data to get response message
     // Tip: You can return an object or Promise as fallback response to avoid rejection
   })
+
+  inject('api', api)
 }
