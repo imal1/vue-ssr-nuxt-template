@@ -78,7 +78,7 @@
           </ButtonDialog>
         </template>
       </Table>
-      <div class="flex justify-center mt-20px">
+      <div v-if="!tableLoading" class="flex justify-center mt-20px">
         <el-button type="primary" @click="doSubmit">提交</el-button>
       </div>
     </div>
@@ -216,7 +216,7 @@ export default defineComponent({
 .app-data-fill {
   height: calc(100vh - 90px);
   ::v-deep .el-table__empty-block {
-    min-height: calc(100vh - 160px);
+    min-height: calc(100vh - 112px);
   }
   ::v-deep .el-collapse-item__header {
     font-size: 14px;
