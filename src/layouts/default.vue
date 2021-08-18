@@ -1,10 +1,11 @@
 <template>
-  <Container direction="vertical" class="lg:container lg:mx-auto">
+  <Container direction="vertical">
     <el-header class="flex border-b">
       <!-- <div class="flex-1">
         <img src="~/assets/favicon.png" class="max-h-60px" />
       </div> -->
       <Nav
+        class="lg:container lg:mx-auto"
         :list="routeList"
         :default-active="navActive"
         :select="doMenuSelect"
