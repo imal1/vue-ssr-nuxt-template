@@ -95,37 +95,44 @@ export default defineComponent({
   },
 })
 </script>
-<style lang="postcss" scoped>
->>> .el-menu {
+<style lang="scss" scoped>
+::v-deep .el-menu {
   border-style: none;
 }
->>> div.el-menu--horizontal {
+::v-deep div.el-menu--horizontal {
   margin-left: -10px;
 }
 
->>> .el-menu--horizontal > .el-menu-item,
->>> .el-menu--horizontal > .el-submenu .el-submenu__title {
+::v-deep .el-menu--horizontal > .el-menu-item,
+::v-deep .el-menu--horizontal > .el-submenu .el-submenu__title {
   padding: 0;
   line-height: 60px;
   height: 48px;
 }
 
->>> .el-menu--horizontal > .el-menu-item:not(:last-child),
->>> .el-menu--horizontal > .el-submenu .el-submenu__title:not(:last-child) {
+::v-deep .el-menu--horizontal > .el-menu-item:not(:last-child),
+::v-deep
+  .el-menu--horizontal
+  > .el-submenu
+  .el-submenu__title:not(:last-child) {
   margin-right: 20px;
 }
 
->>> .el-menu--collapse .el-menu .el-submenu,
->>> .el-menu--popup,
->>> .el-submenu .el-menu-item {
+::v-deep .el-menu--collapse .el-menu .el-submenu,
+::v-deep .el-menu--popup,
+::v-deep .el-submenu .el-menu-item {
   min-width: 0px;
 }
 
->>> .el-menu--horizontal > .el-submenu.is-active .el-submenu__title,
->>> .el-menu--horizontal > .el-menu-item.is-active,
->>> .el-menu--horizontal .el-menu .el-menu-item.is-active,
->>> .el-menu--horizontal .el-menu .el-submenu.is-active > .el-submenu__title,
->>> .el-submenu.is-active .el-submenu__title i {
-  color: #409eff;
+::v-deep .el-menu--horizontal > .el-submenu.is-active .el-submenu__title,
+::v-deep .el-menu--horizontal > .el-menu-item.is-active,
+::v-deep .el-menu--horizontal .el-menu .el-menu-item.is-active,
+::v-deep
+  .el-menu--horizontal
+  .el-menu
+  .el-submenu.is-active
+  > .el-submenu__title,
+::v-deep .el-submenu.is-active .el-submenu__title i {
+  color: $--color-primary;
 }
 </style>

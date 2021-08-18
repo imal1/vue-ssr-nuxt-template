@@ -1,11 +1,8 @@
 <template>
   <div class="app-data-fill flex">
-    <div class="flex-1 mx-10px px-10px pb-20px overflow-y-auto">
+    <el-scrollbar class="flex-1">
       <Table
         v-loading="tableLoading"
-        border
-        stripe
-        default-expand-all
         :show-header="false"
         :columns="columns"
         :data="detailList"
@@ -78,10 +75,10 @@
           </ButtonDialog>
         </template>
       </Table>
-      <div v-if="!tableLoading" class="flex justify-center mt-20px">
+      <div v-if="!tableLoading" class="flex justify-center my-20px">
         <el-button type="primary" @click="doSubmit">提交</el-button>
       </div>
-    </div>
+    </el-scrollbar>
     <div class="w-100px flex items-center -mt-60px">
       <el-timeline class="m-0 p-0">
         <el-timeline-item
@@ -218,25 +215,12 @@ export default defineComponent({
   ::v-deep .el-table__empty-block {
     min-height: calc(100vh - 112px);
   }
-  ::v-deep .el-collapse-item__header {
-    font-size: 14px;
-  }
-  ::v-deep .el-table__row--level-0 {
-    font-size: 14px;
-    height: 48px;
-    font-weight: 500;
-    color: $--color-text-primary;
-  }
-  ::v-deep .el-table__row--level-1 {
-    font-size: 13px;
-    color: $--color-text-primary;
-    font-weight: 500;
-  }
-  ::v-deep .el-table__row--level-3 {
-    color: #909399;
-  }
   ::v-deep .el-tree-node__content {
     height: 36px;
+  }
+  ::v-deep .el-scrollbar__wrap {
+    overflow-x: hidden;
+    padding-right: 8px;
   }
 }
 </style>

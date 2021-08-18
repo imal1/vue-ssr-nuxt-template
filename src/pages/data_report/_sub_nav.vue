@@ -1,11 +1,15 @@
 <template>
-  <div>report</div>
+  <resource-record-page />
 </template>
 <script lang="ts">
 import { defineComponent, useStore } from '@nuxtjs/composition-api'
-import { DataReportMenu } from '../../store/data_report/index'
+import { DataReportMenu } from '../../typings/types'
+import ResourceRecordPage from './-index.vue'
 
 export default defineComponent({
+  components: {
+    ResourceRecordPage,
+  },
   setup() {
     const store = useStore()
     store.commit('setMenuList', DataReportMenu)

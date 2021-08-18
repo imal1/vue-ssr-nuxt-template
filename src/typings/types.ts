@@ -176,3 +176,10 @@ export const DataReportMenu = [
     ]
   },
 ]
+
+export enum DateType {
+  year = '年',
+  quarter = '季',
+  month = '月',
+  day = '日'
+}

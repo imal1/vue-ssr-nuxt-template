@@ -1,9 +1,9 @@
 <template>
   <Container direction="vertical" class="lg:container lg:mx-auto">
     <el-header class="flex border-b">
-      <div class="flex-1">
+      <!-- <div class="flex-1">
         <img src="~/assets/favicon.png" class="max-h-60px" />
-      </div>
+      </div> -->
       <Nav
         :list="routeList"
         :default-active="navActive"
@@ -67,6 +67,9 @@ export default defineComponent({
 })
 </script>
 <style lang="scss" scoped>
+.el-aside {
+  height: calc(100vh - 90px);
+}
 .el-footer {
   color: $--color-text-secondary;
 }

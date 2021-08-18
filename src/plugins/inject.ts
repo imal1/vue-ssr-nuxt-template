@@ -1,6 +1,7 @@
 // import Vue from 'vue'
 import { MessageBox, Notification, Message, Loading } from 'element-ui'
 import lodash from 'lodash'
+const nzhcn = require('nzh/cn')
 
 export default function (context: any, inject: any) {
   context.$msgbox = MessageBox
@@ -11,6 +12,7 @@ export default function (context: any, inject: any) {
   context.$message = Message
   context.$fullLoading = Loading.service
   context.$_ = lodash
+  context.$nzhcn = nzhcn
   inject('msgbox', MessageBox)
   inject('alert', MessageBox.alert)
   inject('confirm', MessageBox.confirm)
@@ -19,6 +21,7 @@ export default function (context: any, inject: any) {
   inject('message', Message)
   inject('fullLoading', Loading.service)
   inject('_', lodash)
+  inject('nzhcn', nzhcn)
   // Object.defineProperty(Vue.prototype, '$msgbox', {
   //   get() {
   //     return MessageBox

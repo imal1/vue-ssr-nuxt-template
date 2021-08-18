@@ -124,11 +124,12 @@ const config: NuxtConfig = {
   },
 
   vite: {
+    ssr: true,
     optimizeDeps: {
       include: [
         'cookie'
       ],
-    }
+    },
   },
 
   i18n: {
@@ -144,6 +145,17 @@ const config: NuxtConfig = {
     defaultLocale: 'zh',
     lazy: true,
     langDir: 'lang/'
+  },
+
+  dayjs: {
+    locales: ['zh-cn', 'en'],
+    defaultLocale: 'zh-cn',
+    defaultTimeZone: 'Asia/Beijing',
+    plugins: [
+      'utc',
+      'timezone',
+      'localeData'
+    ]
   }
 }
 

@@ -1,6 +1,13 @@
 <template>
   <div>
-    <el-table ref="tableRef" :data="data" v-bind="$attrs">
+    <el-table
+      ref="tableRef"
+      stripe
+      default-expand-all
+      highlight-current-row
+      v-bind="$attrs"
+      :data="data"
+    >
       <template v-for="(col, index) in columns">
         <el-table-column v-bind="col" :key="index">
           <template #default="{ row, column, $index }">
@@ -61,8 +68,24 @@ export default defineComponent({
   },
 })
 </script>
-<style lang="postcss" scoped>
->>> .el-pagination {
+<style lang="scss" scoped>
+::v-deep .el-pagination {
   text-align: right;
+}
+::v-deep .el-table {
+  .el-table-row {
+    height: 40px;
+    font-size: 14px;
+  }
+  .el-table__row--level-0 {
+    font-size: 15px;
+    height: 42px;
+    font-weight: bold;
+    color: $--color-text-primary;
+  }
+  .el-table__row--level-1 {
+    font-weight: 500;
+    color: $--color-text-primary;
+  }
 }
 </style>
