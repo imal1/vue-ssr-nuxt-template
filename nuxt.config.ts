@@ -28,7 +28,8 @@ const config: NuxtConfig = {
 
   // Global CSS: https://go.nuxtjs.dev/config-css
   css: [
-    '@/theme/element-ui.scss'
+    '@/theme/element-ui.scss',
+    '@/theme/index.scss'
   ],
 
   styleResources: {
@@ -119,7 +120,7 @@ const config: NuxtConfig = {
 
   server: {
     port: 3000,
-    host: '127.0.0.1'
+    host: 'localhost'
   },
 
   vite: {

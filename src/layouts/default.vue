@@ -15,6 +15,7 @@
         <Menu
           router
           :list="menuList"
+          :default-openeds="$_.map(menuList, (menu) => menu.index)"
           :default-active="menuActive"
           class="h-full"
         />
@@ -43,7 +44,8 @@ export default defineComponent({
   setup() {
     const store = useStore()
     const routeList = store.getters.routePathList
-    const navActive = ref(routeList[0].path)
+    const routePath = useRoute().value.name?.split('-')[0]
+    const navActive = ref(routePath === 'index' ? routeList[0].path : routePath)
     const menuActive = computed(() => useRoute().value.params.sub_nav)
     const menuList = computed(() =>
       store.getters.menuRouteList(navActive.value)

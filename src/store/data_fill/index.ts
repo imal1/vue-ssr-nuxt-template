@@ -1,3 +1,4 @@
+import { cloneDeep } from 'lodash'
 import { MutationTree, GetterTree } from 'vuex'
 
 const state = () => ({
@@ -9,7 +10,7 @@ export type RootState = ReturnType<typeof state>
 
 const mutations: MutationTree<RootState> = {
   setDetailList(state: Record<string, any>, detailList: Array<any>) {
-    state.detailList = doInChildrenList(detailList)
+    state.detailList = detailList
   },
   setRecordList(state: Record<string, any>, recordList: Array<any>) {
     state.recordList = recordList
@@ -40,7 +41,11 @@ function doInChildrenList(arr: any[]) {
 }
 
 const getters: GetterTree<RootState, RootState> = {
-  detailList: (state: RootState) => state.detailList,
+  detailTargetList: (state: RootState) => {
+    const detailList = cloneDeep(state.detailList)
+      .map((detail: any) => ({ ...detail, isParent: true }))
+    return doInChildrenList(detailList)
+  },
   recordList: (state: RootState) => state.recordList,
 }
 

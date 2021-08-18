@@ -7,9 +7,9 @@ import {
   useStore,
   defineComponent,
   useRoute,
-  onMounted,
   useRouter,
   watch,
+  onMounted,
 } from '@nuxtjs/composition-api'
 import SubMainPage from './-index.vue'
 
@@ -31,9 +31,7 @@ export default defineComponent({
         router.replace(newMenuList[0].route)
       }
     })
-    return {
-      menuList,
-    }
+    return {}
   },
 })
 </script>
