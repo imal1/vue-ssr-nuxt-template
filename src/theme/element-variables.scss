@@ -109,6 +109,7 @@ $--border-color-extra-light: #f2f6fc !default;
 // Background
 /// color|1|Background Color|4
 $--background-color-base: #f5f7fa !default;
+$--background-color: #f2f2f2 !default;
 
 /* Link
 -------------------------- */
@@ -822,7 +823,7 @@ $--menu-item-font-size: $--font-size-base !default;
 /// color||Color|0
 $--menu-item-font-color: $--color-text-primary !default;
 /// color||Color|0
-$--menu-background-color: $--color-white !default;
+$--menu-background-color: $--background-color !default;
 $--menu-item-hover-fill: $--color-primary-light-9 !default;
 
 /* Rate
@@ -1017,7 +1018,7 @@ $--empty-bottom-margin-top: 20px !default;
 $--descriptions-header-margin-bottom: 20px !default;
 $--descriptions-title-font-size: 16px !default;
 $--descriptions-table-border: 1px solid $--border-color-lighter !default;
-$--descriptions-item-bordered-label-background: #fafafa !default;
+$--descriptions-item-bordered-label-background: $--background-color !default;
 
 /* Skeleton
 --------------------------*/

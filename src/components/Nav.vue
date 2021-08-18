@@ -23,8 +23,10 @@
           :popper-append-to-body="false"
         >
           <template slot="title">
-            <i v-if="item.icon" :class="`el-icon el-icon-${item.icon}`" />
-            {{ item.name }}
+            <div class="nav-button">
+              <i v-if="item.icon" :class="`el-icon el-icon-${item.icon}`" />
+              {{ item.name }}
+            </div>
           </template>
           <template v-for="subItem in item.children">
             <el-menu-item
@@ -33,11 +35,13 @@
               :route="item.route"
             >
               <template slot="title">
-                <i
-                  v-if="subItem.icon"
-                  :class="`el-icon el-icon-${subItem.icon}`"
-                />
-                {{ subItem.name }}
+                <div class="nav-button">
+                  <i
+                    v-if="subItem.icon"
+                    :class="`el-icon el-icon-${subItem.icon}`"
+                  />
+                  {{ subItem.name }}
+                </div>
               </template>
             </el-menu-item>
           </template>
@@ -49,8 +53,10 @@
           :route="item.route"
         >
           <template slot="title">
-            <i v-if="item.icon" :class="`el-icon el-icon-${item.icon}`" />
-            {{ item.name }}
+            <div class="nav-button">
+              <i v-if="item.icon" :class="`el-icon el-icon-${item.icon}`" />
+              {{ item.name }}
+            </div>
           </template>
         </el-menu-item>
       </template>
@@ -96,43 +102,29 @@ export default defineComponent({
 })
 </script>
 <style lang="scss" scoped>
-::v-deep .el-menu {
-  border-style: none;
+::v-deep .el-menu,
+::v-deep .el-menu--horizontal > .el-menu-item:not(.is-disabled):hover,
+::v-deep .el-menu--horizontal > .el-menu-item:not(.is-disabled):focus {
+  background: transparent;
 }
-::v-deep div.el-menu--horizontal {
-  margin-left: -10px;
+::v-deep .el-menu.el-menu--horizontal,
+::v-deep .el-menu-item {
+  border: none !important;
+  padding: 0 8px;
 }
-
-::v-deep .el-menu--horizontal > .el-menu-item,
-::v-deep .el-menu--horizontal > .el-submenu .el-submenu__title {
-  padding: 0;
-  line-height: 60px;
-  height: 48px;
+::v-deep .nav-button {
+  height: 34px;
+  line-height: 32px;
+  margin: 12px 0;
+  font-size: 14px;
+  padding: 0 10px;
+  font-weight: 400;
+  border: 1px solid transparent;
 }
-
-::v-deep .el-menu--horizontal > .el-menu-item:not(:last-child),
-::v-deep
-  .el-menu--horizontal
-  > .el-submenu
-  .el-submenu__title:not(:last-child) {
-  margin-right: 20px;
-}
-
-::v-deep .el-menu--collapse .el-menu .el-submenu,
-::v-deep .el-menu--popup,
-::v-deep .el-submenu .el-menu-item {
-  min-width: 0px;
-}
-
-::v-deep .el-menu--horizontal > .el-submenu.is-active .el-submenu__title,
-::v-deep .el-menu--horizontal > .el-menu-item.is-active,
-::v-deep .el-menu--horizontal .el-menu .el-menu-item.is-active,
-::v-deep
-  .el-menu--horizontal
-  .el-menu
-  .el-submenu.is-active
-  > .el-submenu__title,
-::v-deep .el-submenu.is-active .el-submenu__title i {
-  color: $--color-primary;
+::v-deep .is-active > .nav-button,
+::v-deep .nav-button:hover {
+  border-color: #e5e5e5;
+  border-radius: 6px;
+  background: $--background-color;
 }
 </style>

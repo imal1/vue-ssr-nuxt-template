@@ -7,7 +7,7 @@
  * @LastEditTime: 2021-07-15 17:33:06
 -->
 <template>
-  <el-menu ref="root" v-bind="menuAttrs" v-on="menuEvents">
+  <el-menu id="co-menu" ref="root" v-bind="menuAttrs" v-on="menuEvents">
     <template v-for="(item, key) in menuList">
       <el-submenu
         v-if="item.children && item.children.length > 0"
@@ -58,11 +58,7 @@
   </el-menu>
 </template>
 <script lang="ts">
-import {
-  computed,
-  defineComponent,
-  PropType,
-} from '@nuxtjs/composition-api'
+import { computed, defineComponent, PropType } from '@nuxtjs/composition-api'
 import { omit, keys, isFunction, pickBy } from 'lodash'
 import { IMenuItem } from './typings'
 
@@ -86,14 +82,21 @@ export default defineComponent({
   },
 })
 </script>
-<style lang="postcss" scoped>
->>> .el-menu-item,
->>> .el-submenu__title {
-  height: 48px;
-  line-height: 48px;
-}
-.el-submenu .el-menu-item {
-  height: 42px;
-  line-height: 42px;
+<style lang="scss" scoped>
+#co-menu {
+  ::v-deep .el-menu-item,
+  ::v-deep .el-submenu__title {
+    height: 36px;
+    line-height: 36px;
+  }
+  ::v-deep .el-submenu .el-menu-item {
+    height: 30px;
+    line-height: 30px;
+  }
+  ::v-deep .el-menu-item:hover,
+  ::v-deep .el-menu-item:focus,
+  ::v-deep .el-menu-item.is-active {
+    background-color: $--color-white;
+  }
 }
 </style>
