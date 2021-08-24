@@ -25,9 +25,9 @@
         <Nuxt />
       </Main>
     </Container>
-    <Footer height="30px" class="text-center">
+    <!-- <Footer height="30px" class="text-center">
       <span>@Mandala 曼荼罗</span>
-    </Footer>
+    </Footer> -->
   </Container>
 </template>
 <script lang="ts">
@@ -38,16 +38,16 @@ import {
   useRoute,
   useStore,
 } from '@nuxtjs/composition-api'
-import { Container, Main, Footer, Aside } from 'element-ui'
+import { Container, Main, Aside } from 'element-ui'
 
 export default defineComponent({
-  components: { Container, Main, Footer, Aside },
+  components: { Container, Main, Aside },
   setup() {
     const store = useStore()
     const routeList = store.getters.routePathList
     const routePath = useRoute().value.name?.split('-')[0]
     const navActive = ref(routePath === 'index' ? routeList[0].path : routePath)
-    const menuActive = computed(() => useRoute().value.params.sub_nav)
+    const menuActive = computed(() => useRoute().value.params.menu_active)
     const menuList = computed(() =>
       store.getters.menuRouteList(navActive.value)
     )
@@ -69,7 +69,7 @@ export default defineComponent({
 </script>
 <style lang="scss" scoped>
 .el-aside {
-  height: calc(100vh - 90px);
+  height: calc(100vh - 60px);
 }
 .el-footer {
   color: $--color-text-secondary;

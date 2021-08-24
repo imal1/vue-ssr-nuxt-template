@@ -23,10 +23,10 @@
           :popper-append-to-body="false"
         >
           <template slot="title">
-            <div class="nav-button">
+            <el-card shadow="hover" class="nav-button">
               <i v-if="item.icon" :class="`el-icon el-icon-${item.icon}`" />
               {{ item.name }}
-            </div>
+            </el-card>
           </template>
           <template v-for="subItem in item.children">
             <el-menu-item
@@ -35,13 +35,13 @@
               :route="item.route"
             >
               <template slot="title">
-                <div class="nav-button">
+                <el-card shadow="hover" class="nav-button">
                   <i
                     v-if="subItem.icon"
                     :class="`el-icon el-icon-${subItem.icon}`"
                   />
                   {{ subItem.name }}
-                </div>
+                </el-card>
               </template>
             </el-menu-item>
           </template>
@@ -53,10 +53,10 @@
           :route="item.route"
         >
           <template slot="title">
-            <div class="nav-button">
+            <el-card shadow="hover" class="nav-button">
               <i v-if="item.icon" :class="`el-icon el-icon-${item.icon}`" />
               {{ item.name }}
-            </div>
+            </el-card>
           </template>
         </el-menu-item>
       </template>
@@ -116,10 +116,12 @@ export default defineComponent({
   height: 34px;
   line-height: 32px;
   margin: 12px 0;
-  font-size: 14px;
-  padding: 0 10px;
-  font-weight: 400;
-  border: 1px solid transparent;
+  & > .el-card__body {
+    font-size: 14px;
+    padding: 0 10px;
+    font-weight: 400;
+    border: 1px solid transparent;
+  }
 }
 ::v-deep .is-active > .nav-button,
 ::v-deep .nav-button:hover {

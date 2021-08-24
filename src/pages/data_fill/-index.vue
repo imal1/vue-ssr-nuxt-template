@@ -109,7 +109,7 @@ export default defineComponent({
     const store = useStore()
     const route = useRoute()
     const deptList = ref(store.getters.deptList)
-    const subNav = computed(() => route.value.params.sub_nav)
+    const menuActive = computed(() => route.value.params.menu_active)
     const detailList = ref([] as any[])
     const recordList = computed(() => store.getters['data_fill/recordList'])
     const tableLoading = ref(true)
@@ -139,10 +139,10 @@ export default defineComponent({
 
     watchEffect((onInvalidate) => {
       onInvalidate(() => (detailList.value = []))
-      if (subNav.value) {
+      if (menuActive.value) {
         store
           .dispatch('data_fill/fetchDetailList', {
-            chapterId: subNav.value,
+            chapterId: menuActive.value,
           })
           .then(() => {
             detailList.value = store.getters['data_fill/detailTargetList']
@@ -211,7 +211,7 @@ export default defineComponent({
 </script>
 <style lang="scss" scoped>
 .app-data-fill {
-  height: calc(100vh - 90px);
+  height: calc(100vh - 60px);
   ::v-deep .el-table__empty-block {
     min-height: calc(100vh - 112px);
   }

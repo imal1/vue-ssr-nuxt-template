@@ -1,5 +1,5 @@
 <template>
-  <sub-main-page />
+  <data-fill-page />
 </template>
 <script lang="ts">
 import {
@@ -8,17 +8,17 @@ import {
   defineComponent,
   useRoute,
   useRouter,
-  watch,
   onMounted,
+  watchEffect,
 } from '@nuxtjs/composition-api'
-import SubMainPage from './-index.vue'
+import DataFillPage from './-index.vue'
 
 export default defineComponent({
-  components: { SubMainPage },
+  components: { DataFillPage },
   setup() {
     const store = useStore()
     const router = useRouter()
-    const subNav = computed(() => useRoute().value.params.sub_nav)
+    const menuActive = computed(() => useRoute().value.params.menu_active)
     const menuList = computed(() => (store.state as any).menuList)
     onMounted(() => {
       if (!menuList.value.length) {
@@ -26,9 +26,9 @@ export default defineComponent({
         store.dispatch('data_fill/fetchRecordList')
       }
     })
-    watch([subNav, menuList], ([newNav, newMenuList]) => {
-      if (!newNav && newMenuList.length) {
-        router.replace(newMenuList[0].route)
+    watchEffect(() => {
+      if (!menuActive.value && menuList.value?.length) {
+        router.replace(menuList.value[0].route)
       }
     })
     return {}

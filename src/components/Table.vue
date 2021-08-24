@@ -5,11 +5,17 @@
       stripe
       default-expand-all
       highlight-current-row
-      v-bind="$attrs"
       :data="data"
+      v-bind="attrs"
+      v-on="events"
     >
       <template v-for="(col, index) in columns">
-        <el-table-column v-bind="col" :key="index">
+        <el-table-column
+          v-if="!col.prop && col.type === 'index'"
+          v-bind="col"
+          :key="index"
+        />
+        <el-table-column v-else v-bind="col" :key="index">
           <template #default="{ row, column, $index }">
             <slot :name="col.prop" :row="row" :column="column" :index="$index">
               {{ row[col.prop] }}
@@ -22,7 +28,7 @@
   </div>
 </template>
 <script lang="ts">
-import { defineComponent, PropType, ref, watch } from '@nuxtjs/composition-api'
+import { computed, defineComponent, PropType } from '@nuxtjs/composition-api'
 import { pickBy, omit, keys, isFunction } from 'lodash'
 
 export interface ITableColumn {
@@ -53,13 +59,24 @@ export default defineComponent({
     },
   },
   setup(_props: any, ctx: any) {
-    const attrs = ref({})
-    const events = ref({})
-
-    watch(ctx.attrs, (newAttrs) => {
-      events.value = pickBy(newAttrs, isFunction)
-      attrs.value = omit(newAttrs, keys(events.value))
-    })
+    const tableFuncAttrName = [
+      'row-class-name',
+      'row-style',
+      'cell-class-name',
+      'cell-style',
+      'header-row-class-name',
+      'header-row-style',
+      'header-cell-class-name',
+      'header-cell-style',
+      'row-key',
+      'summary-method',
+      'span-method',
+      'load',
+    ]
+    const events = computed(() =>
+      omit(pickBy(ctx.attrs, isFunction), tableFuncAttrName)
+    )
+    const attrs = computed(() => omit(ctx.attrs, keys(events.value)))
 
     return {
       attrs,
