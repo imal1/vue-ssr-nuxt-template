@@ -15,7 +15,7 @@
     "strict": true,
     "noEmit": true,
     "experimentalDecorators": true,
-    "baseUrl": ".",
+    "baseUrl": "./src",
     "paths": {
       "~/*": [
         "./*"
@@ -26,6 +26,7 @@
     },
     "types": [
       "@nuxt/types",
+      "@nuxt/content",
       "@types/node",
       "@nuxtjs/axios",
       "nuxt-i18n",

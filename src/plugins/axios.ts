@@ -1,10 +1,13 @@
 import { NuxtAxiosInstance } from "@nuxtjs/axios"
 import { AxiosResponse } from 'axios'
+import { defineNuxtPlugin } from '@nuxtjs/composition-api'
 import { toNumber } from "lodash"
+import GlobalApi from '@/api/app'
+import DataFillApi from '@/api/datafill'
 
-async function getHost(api: NuxtAxiosInstance, $axios: NuxtAxiosInstance) {
+async function getHost(api: NuxtAxiosInstance, $content: any) {
   try {
-    const { host } = await $axios.$get('../host.json')
+    const { host } = await $content('host').fetch()
 
     api.setBaseURL(`${host}${process.env.PREFIX}`)
   } catch (error) {
@@ -12,13 +15,13 @@ async function getHost(api: NuxtAxiosInstance, $axios: NuxtAxiosInstance) {
   }
 }
 
-export default async function (
-  { $axios, $message, error: nuxtError, isDev }: any,
+export default defineNuxtPlugin(async (
+  { $axios, $content, $message, error: nuxtError, isDev }: any,
   inject: any
-) {
+) => {
   const api = $axios.create()
 
-  await getHost(api, $axios)
+  await getHost(api, $content)
 
   api.onResponse((res: AxiosResponse) => {
     const { data, code, msg } = res.data
@@ -43,5 +46,8 @@ export default async function (
     // Tip: You can return an object or Promise as fallback response to avoid rejection
   })
 
-  inject('api', api)
-}
+  inject('globalApi', GlobalApi(api.$request))
+
+  inject('datafillApi', DataFillApi(api.$request))
+
+})

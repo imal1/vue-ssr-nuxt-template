@@ -18,14 +18,14 @@
         :format="searchModel.type === 'year' ? 'yyyy' : 'yyyy-MM'"
       />
     </template>
-    <template #action>
+    <!-- <template #action>
       <el-button type="primary" @click="doSearch">查询</el-button>
-    </template>
+    </template> -->
   </Form>
 </template>
 <script lang="ts">
 import { computed, defineComponent } from '@nuxtjs/composition-api'
-import { DateType } from './util'
+import { DateType } from './-util'
 
 export default defineComponent({
   props: {

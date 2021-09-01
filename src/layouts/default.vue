@@ -8,16 +8,16 @@
         class="lg:container lg:mx-auto"
         :list="routeList"
         :default-active="navActive"
-        :select="doMenuSelect"
+        :select="doNavSelect"
       />
     </el-header>
     <Container direction="horizontal">
       <Aside width="auto">
         <Menu
-          router
           :list="menuList"
           :default-openeds="$_.map(menuList, (menu) => menu.index)"
           :default-active="menuActive"
+          :select="doMenuSelect"
           class="h-full"
         />
       </Aside>
@@ -36,7 +36,9 @@ import {
   defineComponent,
   ref,
   useRoute,
+  useRouter,
   useStore,
+  watch,
 } from '@nuxtjs/composition-api'
 import { Container, Main, Aside } from 'element-ui'
 
@@ -44,27 +46,56 @@ export default defineComponent({
   components: { Container, Main, Aside },
   setup() {
     const store = useStore()
+    const router = useRouter()
     const routeList = store.getters.routePathList
-    const routePath = useRoute().value.name?.split('-')[0]
+    const route = useRoute()
+    const routePath = route.value.name?.split('-')[0]
     const navActive = ref(routePath === 'index' ? routeList[0].path : routePath)
-    const menuActive = computed(() => useRoute().value.params.menu_active)
-    const menuList = computed(() =>
-      store.getters.menuRouteList(navActive.value)
-    )
-    const doMenuSelect = (index: string) => {
+    const menuActive = computed(() => route.value.query.menu)
+    const menuList = computed(() => store.getters.menuIndexList)
+
+    watch(menuList, (newList) => {
+      if (!menuActive.value && newList?.length) {
+        let initIndex = ''
+        if (newList[0].children?.length) {
+          initIndex = newList[0].children[0].index
+        } else {
+          initIndex = newList[0].index
+        }
+        router.replace({
+          query: {
+            menu: initIndex,
+          },
+        })
+      }
+    })
+
+    const doNavSelect = (index: string) => {
       if (navActive.value !== index) {
-        store.commit('clearMenuList')
+        store.commit('SET_MENU_LIST', [])
         navActive.value = index
+        router.replace({
+          query: {
+            menu: undefined,
+          },
+        })
       }
     }
+
+    const doMenuSelect = (menu: string) => {
+      router.replace({ query: { ...route.value.query, menu } })
+    }
+
     return {
       routeList,
       menuList,
       navActive,
       menuActive,
+      doNavSelect,
       doMenuSelect,
     }
   },
+  watchQuery: ['menu'],
 })
 </script>
 <style lang="scss" scoped>

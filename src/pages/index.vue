@@ -17,7 +17,6 @@ export default defineComponent({
     if (routePath === 'index' && routePathList.length) {
       useRouter().replace(routePathList[0].path)
     }
-    console.log(useRouter().getRoutes())
     return {}
   },
 })
