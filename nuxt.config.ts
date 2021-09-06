@@ -17,19 +17,38 @@ const config: NuxtConfig = {
       { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }
     ]
   },
+  env: {
+    PREFIX: '/api',
+  },
 
   srcDir: 'src/',
+  dir: {
+    static: '../public/'
+  },
+  content: {
+    dir: '../public/'
+  },
 
   // Global CSS: https://go.nuxtjs.dev/config-css
   css: [
-    'element-ui/lib/theme-chalk/index.css'
+    '@/theme/element-ui.scss',
+    '@/theme/index.scss'
   ],
+
+  styleResources: {
+    scss: [
+      '~theme/element-variables.scss'
+    ],
+    hoistUseStatements: true
+  },
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
   plugins: [
-    { src: '@/plugins/inject', ssr: false },
+    { src: '@/plugins/inject' },
     { src: '@/plugins/element-ui', ssr: false },
-    { src: '@/plugins/mock' }, // http://mockjs.com
+    { src: '@/plugins/axios' },
+    // { src: '@/plugins/mock', ssr: true }, // http://lavyun.gitee.io/better-mock
+    { src: '@/plugins/appInit' },
   ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components
@@ -47,15 +66,17 @@ const config: NuxtConfig = {
     '@nuxtjs/eslint-module', // https://go.nuxtjs.dev/eslint
     '@nuxtjs/stylelint-module', // https://go.nuxtjs.dev/stylelint
     'nuxt-windicss', // https://windicss.org/integrations/nuxt
+    '@nuxtjs/style-resources', // https://github.com/nuxt-community/style-resources-module
     'nuxt-build-optimisations', // https://github.com/harlan-zw/nuxt-build-optimisations
+    '@nuxtjs/router', // https://github.com/nuxt-community/router-module
+    '@nuxt/content' // https://content.nuxtjs.org/
   ],
 
   // Modules: https://go.nuxtjs.dev/config-modules
   modules: [
-    '@nuxt/http', // https://http.nuxtjs.org
+    '@nuxtjs/axios', // https://axios.nuxtjs.org
     '@nuxtjs/dayjs', // https://github.com/nuxt-community/dayjs-module
     // 'nuxt-i18n', // https://i18n.nuxtjs.org
-    '@nuxt/image', // https://image.nuxtjs.org
     'nuxt-precompress', // https://github.com/frenchrabbit/nuxt-precompress
     '@luxdamore/nuxt-prune-html', // https://luxdamore.github.io/nuxt-prune-html
     '@nuxtjs/component-cache', // https://github.com/nuxt-community/component-cache-module
@@ -68,7 +89,20 @@ const config: NuxtConfig = {
   // Build Configuration: https://go.nuxtjs.dev/config-build
   build: {
     transpile: [/^element-ui/],
+    loaders: {
+      scss: {
+        sourceMap: true,
+        sassOptions: {
+          quiet: true,
+        }
+      },
+    },
+    optimizeCSS: true,
   },
+
+  ssr: false,
+
+  target: 'static',
 
   typescript: {
     typeCheck: {
@@ -78,20 +112,32 @@ const config: NuxtConfig = {
     }
   },
 
-  http: {
-    proxy: true,
-    prefix: '/api'
+  loading: {
+    color: '#67C23A'
   },
 
-  proxy: {
-    '/api': {
-      target: 'http://localhost:3000',
-      pathRewrite: { '^/api': '' },
-      async router() {
-        const hostJSON = await require('./src/static/host.json')
-        return hostJSON.data
-      }
-    }
+  routerModule: {
+    keepDefaultRouter: true
+  },
+
+  axios: {
+    prefix: process.env.PREFIX,
+    // proxy: true
+  },
+
+  // proxy: {
+  //   '/grade': {
+  //     target: 'http://localhost:3000',
+  //     // async router() {
+  //     //   const hostJSON = await require('./public/host.json')
+  //     //   return hostJSON.data
+  //     // }
+  //   }
+  // },
+
+  server: {
+    port: 3000,
+    host: '0.0.0.0'
   },
 
   vite: {
@@ -100,23 +146,33 @@ const config: NuxtConfig = {
       include: [
         'cookie'
       ],
-    }
+    },
   },
 
   i18n: {
-    locales: ['zh', 'en'],
-    defaultLocale: 'zh',
-    vueI18n: {
-      fallbackLocale: 'zh',
-      messages: {
-        zh: {
-          welcome: '您好'
-        },
-        en: {
-          welcome: 'Welcome'
-        }
+    locales: [
+      {
+        code: 'en',
+        file: 'en-US.ts'
+      }, {
+        code: 'zh',
+        file: 'zh-CN.ts'
       }
-    }
+    ],
+    defaultLocale: 'zh',
+    lazy: true,
+    langDir: 'lang/'
+  },
+
+  dayjs: {
+    locales: ['zh-cn', 'en'],
+    defaultLocale: 'zh-cn',
+    defaultTimeZone: 'Asia/Beijing',
+    plugins: [
+      'utc',
+      'timezone',
+      'localeData'
+    ]
   }
 }
 

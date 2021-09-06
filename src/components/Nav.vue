@@ -7,13 +7,11 @@
  * @LastEditTime: 2021-07-15 17:57:18
 -->
 <template>
-  <div id="nav">
+  <div>
     <el-menu
-      :ref="root"
-      :router="router"
-      :default-active="menuIndex"
+      ref="root"
+      router
       mode="horizontal"
-      class="border-none"
       v-bind="menuAttrs"
       v-on="menuEvents"
     >
@@ -25,28 +23,40 @@
           :popper-append-to-body="false"
         >
           <template slot="title">
-            <i v-if="item.icon" :class="`el-icon el-icon-${item.icon}`" />
-            {{ item.name }}
+            <el-card shadow="hover" class="nav-button">
+              <i v-if="item.icon" :class="`el-icon el-icon-${item.icon}`" />
+              {{ item.name }}
+            </el-card>
           </template>
           <template v-for="subItem in item.children">
             <el-menu-item
               :key="subItem.path"
               :index="`${item.path}${subItem.path}`"
+              :route="item.route"
             >
               <template slot="title">
-                <i
-                  v-if="subItem.icon"
-                  :class="`el-icon el-icon-${subItem.icon}`"
-                />
-                {{ subItem.name }}
+                <el-card shadow="hover" class="nav-button">
+                  <i
+                    v-if="subItem.icon"
+                    :class="`el-icon el-icon-${subItem.icon}`"
+                  />
+                  {{ subItem.name }}
+                </el-card>
               </template>
             </el-menu-item>
           </template>
         </el-submenu>
-        <el-menu-item v-else :key="item.path" :index="item.path">
+        <el-menu-item
+          v-else
+          :key="item.path"
+          :index="item.path"
+          :route="item.route"
+        >
           <template slot="title">
-            <i v-if="item.icon" :class="`el-icon el-icon-${item.icon}`" />
-            {{ item.name }}
+            <el-card shadow="hover" class="nav-button">
+              <i v-if="item.icon" :class="`el-icon el-icon-${item.icon}`" />
+              {{ item.name }}
+            </el-card>
           </template>
         </el-menu-item>
       </template>
@@ -58,10 +68,10 @@ import {
   defineComponent,
   ref,
   PropType,
-  reactive,
+  computed,
 } from '@nuxtjs/composition-api'
+import { omit, keys, isFunction, pickBy } from 'lodash'
 import { INavItem } from './typings'
-import { GetObjectByTypeofValue, OmitByArray } from './utils'
 
 export default defineComponent({
   props: {
@@ -76,55 +86,47 @@ export default defineComponent({
       },
     },
   },
-  setup(props: any, { attrs }: any) {
+  setup(props: any, ctx: any) {
     const root = ref(null)
-    const menuList = ref(props.list)
-    const { path, children } = menuList.value[0]
-    const menuIndex = ref(
-      children?.length ? `${path}${children[0].path}` : path
-    )
-    const getFuncProps = GetObjectByTypeofValue('function')
-    const menuEvents = getFuncProps(attrs)
-    const menuAttrs = reactive(OmitByArray(Object.keys(menuEvents))(attrs))
+    const menuList = computed(() => props.list)
+    const menuEvents = pickBy(ctx.attrs, isFunction)
+    const menuAttrs = omit(ctx.attrs, keys(menuEvents.value))
 
     return {
       root,
       menuList,
-      menuIndex,
       menuAttrs,
       menuEvents,
     }
   },
 })
 </script>
-<style lang="postcss" scoped>
->>> div.el-menu--horizontal {
-  margin-left: -10px;
+<style lang="scss" scoped>
+::v-deep .el-menu,
+::v-deep .el-menu--horizontal > .el-menu-item:not(.is-disabled):hover,
+::v-deep .el-menu--horizontal > .el-menu-item:not(.is-disabled):focus {
+  background: transparent;
 }
-
->>> .el-menu--horizontal > .el-menu-item,
->>> .el-menu--horizontal > .el-submenu .el-submenu__title {
-  padding: 0;
-  line-height: 60px;
-  height: 48px;
+::v-deep .el-menu.el-menu--horizontal,
+::v-deep .el-menu-item {
+  border: none !important;
+  padding: 0 8px;
 }
-
->>> .el-menu--horizontal > .el-menu-item:not(:last-child),
->>> .el-menu--horizontal > .el-submenu .el-submenu__title:not(:last-child) {
-  margin-right: 20px;
+::v-deep .nav-button {
+  height: 34px;
+  line-height: 32px;
+  margin: 12px 0;
+  & > .el-card__body {
+    font-size: 14px;
+    padding: 0 10px;
+    font-weight: 400;
+    border: 1px solid transparent;
+  }
 }
-
->>> .el-menu--collapse .el-menu .el-submenu,
->>> .el-menu--popup,
->>> .el-submenu .el-menu-item {
-  min-width: 0px;
-}
-
->>> .el-menu--horizontal > .el-submenu.is-active .el-submenu__title,
->>> .el-menu--horizontal > .el-menu-item.is-active,
->>> .el-menu--horizontal .el-menu .el-menu-item.is-active,
->>> .el-menu--horizontal .el-menu .el-submenu.is-active > .el-submenu__title,
->>> .el-submenu.is-active .el-submenu__title i {
-  color: #409eff;
+::v-deep .is-active > .nav-button,
+::v-deep .nav-button:hover {
+  border-color: #e5e5e5;
+  border-radius: 6px;
+  background: $--background-color;
 }
 </style>

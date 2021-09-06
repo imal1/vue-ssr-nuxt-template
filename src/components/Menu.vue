@@ -7,8 +7,8 @@
  * @LastEditTime: 2021-07-15 17:33:06
 -->
 <template>
-  <el-menu :ref="root" v-bind="menuAttrs" v-on="menuEvents">
-    <template v-for="item in menuList">
+  <el-menu id="co-menu" ref="root" v-bind="menuAttrs" v-on="menuEvents">
+    <template v-for="(item, key) in menuList">
       <el-submenu
         v-if="item.children && item.children.length > 0"
         :key="item.index"
@@ -28,8 +28,11 @@
               <i v-if="subItem.icon" :class="`el-icon-${subItem.icon}`" />
               <span>{{ subItem.name }}</span>
             </template>
-            <template v-for="trdItem in subItem.children">
-              <el-menu-item :key="trdItem.index" :index="trdItem.index">
+            <template v-for="(trdItem, trdKey) in subItem.children">
+              <el-menu-item
+                :key="`${key}-${subKey}-${trdKey}`"
+                v-bind="trdItem"
+              >
                 <template slot="title">
                   <i v-if="trdItem.icon" :class="`el-icon-${trdItem.icon}`" />
                   <span>{{ trdItem.name }}</span>
@@ -55,14 +58,9 @@
   </el-menu>
 </template>
 <script lang="ts">
-import {
-  defineComponent,
-  PropType,
-  reactive,
-  ref,
-} from '@nuxtjs/composition-api'
+import { computed, defineComponent, PropType } from '@nuxtjs/composition-api'
+import { omit, keys, isFunction, pickBy } from 'lodash'
 import { IMenuItem } from './typings'
-import { GetObjectByTypeofValue, OmitByArray } from './utils'
 
 export default defineComponent({
   props: {
@@ -71,15 +69,12 @@ export default defineComponent({
       required: true,
     },
   },
-  setup({ list }: any, { attrs }: any) {
-    const root = ref(null)
-    const menuList = reactive(list)
-    const getFuncProps = GetObjectByTypeofValue('function')
-    const menuEvents = getFuncProps(attrs)
-    const menuAttrs = reactive(OmitByArray(Object.keys(menuEvents))(attrs))
+  setup(props: any, ctx: any) {
+    const menuList = computed(() => props.list)
+    const menuEvents = computed(() => pickBy(ctx.attrs, isFunction))
+    const menuAttrs = computed(() => omit(ctx.attrs, keys(menuEvents.value)))
 
     return {
-      root,
       menuList,
       menuAttrs,
       menuEvents,
@@ -87,14 +82,21 @@ export default defineComponent({
   },
 })
 </script>
-<style lang="postcss" scoped>
->>> .el-menu-item,
->>> .el-submenu__title {
-  height: 48px;
-  line-height: 48px;
-}
-.el-submenu .el-menu-item {
-  height: 42px;
-  line-height: 42px;
+<style lang="scss" scoped>
+#co-menu {
+  ::v-deep .el-menu-item,
+  ::v-deep .el-submenu__title {
+    height: 36px;
+    line-height: 36px;
+  }
+  ::v-deep .el-submenu .el-menu-item {
+    height: 30px;
+    line-height: 30px;
+  }
+  ::v-deep .el-menu-item:hover,
+  ::v-deep .el-menu-item:focus,
+  ::v-deep .el-menu-item.is-active {
+    background-color: $--color-white;
+  }
 }
 </style>

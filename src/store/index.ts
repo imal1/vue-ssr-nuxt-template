@@ -1,37 +1,38 @@
-import { ActionTree, MutationTree } from 'vuex'
+import { GetterTree } from 'vuex'
+import { make } from 'vuex-pathify'
 
 const state = () => ({
-  routes: [] as Record<string, any>[]
+  routeList: [] as Record<string, any>[],
+  deptList: [] as Record<string, any>[],
+  menuList: [] as Record<string, any>[]
 })
 
 export type RootState = ReturnType<typeof state>
 
-const mutations: MutationTree<RootState> = {
-  setRoutes(state: Record<string, any>, routes: Array<any>) {
-    state.routes = routes
-  }
+const mutations = make.mutations(state)
+
+const getters: GetterTree<RootState, RootState> = {
+  ...make.getters(state),
+  menuIndexList: (state: RootState) => state.menuList.map((item: any) => ({
+    ...item,
+    index: item.index ? `${item.index}` : `${item.id}`,
+    children: item.children?.length ? item.children.map((child: any) => ({
+      ...child,
+      index: `${item.index}-${child.index ? child.index : child.id}`
+    })) : null
+  })),
+  routePathList: (state: RootState) => state.routeList.map((d: any) => ({
+    ...d,
+    path: d.path ? d.path : d.index,
+    route: `/${d.path ? d.path : d.index}`
+  })),
 }
 
-const actions: ActionTree<RootState, RootState> = {
-  async fetchRoutes({ commit }: Record<string, any>, { _$http }: Record<string, any>) {
-    try {
-      const { data } = await require('../static/routes.json')
-      if (!data?.length) {
-        throw new Error('未添加路由数据')
-      }
-      commit('setRoutes', data)
-    } catch (error) {
-      throw new Error(error)
-    }
-  },
-  async nuxtServerInit({ dispatch }: Record<string, any>, context: any) {
-    // https://zh.nuxtjs.org/docs/2.x/directory-structure/store#the-nuxtserverinit-action
-    await dispatch('fetchRoutes', context)
-  },
-}
+const actions: any = make.actions(state)
 
 export default {
   state,
   mutations,
   actions,
+  getters,
 }

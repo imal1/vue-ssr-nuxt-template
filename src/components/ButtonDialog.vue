@@ -9,19 +9,19 @@
       :visible.sync="visible"
       v-on="dialogEvents"
     >
-      <template v-if="!dialogAttrs.title" slot="title">
+      <template v-if="!dialogAttrs.title" #title>
         <slot name="title" />
       </template>
       <slot />
-      <template slot="footer">
-        <slot name="footer" />
+      <template #footer>
+        <slot name="footer" :toggle-visible="toggleVisible" />
       </template>
     </el-dialog>
   </div>
 </template>
 <script lang="ts">
 import { defineComponent, reactive, ref } from '@nuxtjs/composition-api'
-import { GetObjectByTypeofValue, DifferFromObject } from './utils'
+import { omit, keys, isFunction, pickBy } from 'lodash'
 
 export default defineComponent({
   props: {
@@ -37,25 +37,30 @@ export default defineComponent({
       },
     },
   },
-  setup(props: any) {
+  setup(props: any, ctx: any) {
     const visible = ref(false)
     const buttonProps = reactive(props.button)
     const dialogProps = reactive(props.dialog)
-    const getFuncProps = GetObjectByTypeofValue('function')
-    const buttonEvents = getFuncProps(buttonProps)
-    const dialogEvents = getFuncProps(dialogProps)
-    const buttonAttrs = DifferFromObject(buttonEvents, buttonProps)
-    const dialogAttrs = DifferFromObject(dialogEvents, dialogProps)
+    const buttonEvents = pickBy(buttonProps, isFunction)
+    const dialogEvents = pickBy(dialogProps, isFunction)
+    const buttonAttrs = omit(buttonProps, keys(buttonEvents))
+    const dialogAttrs = omit(dialogProps, keys(dialogEvents))
     const { click } = buttonEvents
+    const toggleVisible = (toVisible: boolean) => {
+      visible.value = toVisible
+    }
 
-    buttonEvents.click = () => {
+    buttonEvents.click = async () => {
       if (click) {
         click()
       }
-      visible.value = true
+      await toggleVisible(true)
     }
 
-    dialogProps.title = dialogProps.title || buttonProps.label
+    if (!ctx.slots.title) {
+      dialogAttrs['title' as any] =
+        dialogAttrs['title' as any] || buttonProps.label
+    }
 
     return {
       visible,
@@ -63,6 +68,7 @@ export default defineComponent({
       buttonEvents,
       dialogAttrs,
       dialogEvents,
+      toggleVisible,
     }
   },
 })
