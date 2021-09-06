@@ -32,10 +32,10 @@
 
 <script lang="ts">
 import {
+  computed,
   defineComponent,
   PropType,
   reactive,
-  ref,
 } from '@nuxtjs/composition-api'
 import { omit, keys, isFunction, pickBy } from 'lodash'
 
@@ -63,25 +63,26 @@ export default defineComponent({
   },
   setup(props: any, { attrs }: any) {
     const model = reactive(props.values)
-    const formItems = ref([] as any[])
     // 获取表单属性
     const formEvents = pickBy(attrs, isFunction)
     const formAttrs = omit(attrs, keys(formEvents.value))
     // 获取各栏属性
-    formItems.value = props.items.map((item: any) => {
-      const { content, ...otherItem } = item
-      const columnEvents = pickBy(otherItem, isFunction)
-      const columnAttrs = omit(otherItem, keys(columnEvents.value))
-      item = { content, columnAttrs, columnEvents }
-      // 获取输入框属性
-      if (item.content?.is) {
-        const { is, ...otherContent } = content
-        const contentEvents = pickBy(otherContent, isFunction)
-        const contentAttrs = omit(otherContent, keys(contentEvents.value))
-        item.content = { is, contentEvents, contentAttrs }
-      }
-      return item
-    })
+    const formItems = computed(() =>
+      props.items.map((item: any) => {
+        const { content, ...otherItem } = item
+        const columnEvents = pickBy(otherItem, isFunction)
+        const columnAttrs = omit(otherItem, keys(columnEvents.value))
+        item = { content, columnAttrs, columnEvents }
+        // 获取输入框属性
+        if (item.content?.is) {
+          const { is, ...otherContent } = content
+          const contentEvents = pickBy(otherContent, isFunction)
+          const contentAttrs = omit(otherContent, keys(contentEvents.value))
+          item.content = { is, contentEvents, contentAttrs }
+        }
+        return item
+      })
+    )
 
     return {
       model,

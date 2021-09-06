@@ -4,6 +4,9 @@
     "module": "ESNext",
     "moduleResolution": "Node",
     "resolveJsonModule": true,
+    "jsx": "preserve",
+    "importHelpers": true,
+    "noImplicitAny": false,
     "lib": [
       "ESNext",
       "ESNext.AsyncIterable",
@@ -15,7 +18,7 @@
     "strict": true,
     "noEmit": true,
     "experimentalDecorators": true,
-    "baseUrl": ".",
+    "baseUrl": "./src",
     "paths": {
       "~/*": [
         "./*"
@@ -26,11 +29,11 @@
     },
     "types": [
       "@nuxt/types",
+      "@nuxt/content",
       "@types/node",
       "@nuxtjs/axios",
       "nuxt-i18n",
       "@nuxtjs/dayjs",
-      "@nuxt/image",
       "@nuxtjs/auth-next",
     ]
   },

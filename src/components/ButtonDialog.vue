@@ -37,7 +37,7 @@ export default defineComponent({
       },
     },
   },
-  setup(props: any) {
+  setup(props: any, ctx: any) {
     const visible = ref(false)
     const buttonProps = reactive(props.button)
     const dialogProps = reactive(props.dialog)
@@ -57,8 +57,10 @@ export default defineComponent({
       await toggleVisible(true)
     }
 
-    dialogAttrs['title' as any] =
-      dialogAttrs['title' as any] || buttonProps.label
+    if (!ctx.slots.title) {
+      dialogAttrs['title' as any] =
+        dialogAttrs['title' as any] || buttonProps.label
+    }
 
     return {
       visible,

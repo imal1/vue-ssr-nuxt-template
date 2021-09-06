@@ -1,16 +1,19 @@
-// import Vue from 'vue'
+import { defineNuxtPlugin } from '@nuxtjs/composition-api'
 import { MessageBox, Notification, Message, Loading } from 'element-ui'
 import lodash from 'lodash'
+const nzhcn = require('nzh/cn')
+const { toWords } = require('number-to-words')
 
-export default function (context: any, inject: any) {
-  context.$msgbox = MessageBox
-  context.$alert = MessageBox.alert
-  context.$confirm = MessageBox.confirm
-  context.$prompt = MessageBox.prompt
-  context.$notify = Notification
-  context.$message = Message
-  context.$fullLoading = Loading.service
-  context.$_ = lodash
+export default defineNuxtPlugin((_context, inject) => {
+  // context.$msgbox = MessageBox
+  // context.$alert = MessageBox.alert
+  // context.$confirm = MessageBox.confirm
+  // context.$prompt = MessageBox.prompt
+  // context.$notify = Notification
+  // context.$message = Message
+  // context.$fullLoading = Loading.service
+  // context.$_ = lodash
+  // context.$nzhcn = nzhcn
   inject('msgbox', MessageBox)
   inject('alert', MessageBox.alert)
   inject('confirm', MessageBox.confirm)
@@ -19,6 +22,8 @@ export default function (context: any, inject: any) {
   inject('message', Message)
   inject('fullLoading', Loading.service)
   inject('_', lodash)
+  inject('nzhcn', nzhcn)
+  inject('toWords', toWords)
   // Object.defineProperty(Vue.prototype, '$msgbox', {
   //   get() {
   //     return MessageBox
@@ -50,3 +55,4 @@ export default function (context: any, inject: any) {
   //   }
   // })
 }
+)

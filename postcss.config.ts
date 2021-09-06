@@ -7,5 +7,10 @@
  * @LastEditTime: 2021-07-14 14:55:29
  */
 export default {
-  plugins: [require('windicss'), require('autoprefixer')],
+  syntax: 'postcss-scss',
+  parser: 'postcss-scss',
+  plugins: [
+    require('windicss'),
+    require('autoprefixer'),
+  ],
 };
