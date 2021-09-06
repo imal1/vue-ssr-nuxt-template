@@ -59,7 +59,6 @@ import {
   ref,
   PropType,
   reactive,
-  // useRoute,
 } from '@nuxtjs/composition-api'
 import { INavItem } from './typings'
 import { GetObjectByTypeofValue, OmitByArray } from './utils'
@@ -80,7 +79,6 @@ export default defineComponent({
   setup(props: any, { attrs }: any) {
     const root = ref(null)
     const menuList = ref(props.list)
-    // const { params } = useRoute()
     const { path, children } = menuList.value[0]
     const menuIndex = ref(
       children?.length ? `${path}${children[0].path}` : path

@@ -62,7 +62,6 @@ const config: NuxtConfig = {
     // '@dewib/xhr-cache', // https://xhr-cache.dewib.com
     '@nuxtjs/auth-next', // https://auth.nuxtjs.org
     '@nuxtjs/proxy', // https://github.com/nuxt-community
-    'portal-vue/nuxt', // https://portal-vue.linusb.org
     ['@nuxtjs/html-minifier', { logHtml: true }], // https://github.com/nuxt-community/html-minifier-module
   ],
 
