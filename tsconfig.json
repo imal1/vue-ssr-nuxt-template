@@ -34,6 +34,7 @@
       "@nuxtjs/axios",
       "nuxt-i18n",
       "@nuxtjs/dayjs",
+      "@nuxtjs/universal-storage",
       "@nuxtjs/auth-next",
     ]
   },

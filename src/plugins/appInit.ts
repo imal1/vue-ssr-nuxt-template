@@ -1,22 +1,34 @@
+/*
+ * @Author: imali
+ * @Date: 2021-09-07 09:28:19
+ * @LastEditTime: 2021-09-18 15:20:50
+ * @LastEditors: imali
+ * @Description:
+ */
 import { defineNuxtPlugin } from '@nuxtjs/composition-api'
 
 export default defineNuxtPlugin(
-  async ({ store, $globalApi, $message, $fullLoading }: any) => {
-    const loading = $fullLoading()
+  async (ctx: any) => {
+    const { $storage, $globalApi, $message, $fullLoading, env } = ctx
+    if (env.NUXT_ENV_STORYBOOK) {
+      return
+    }
+    const loading = process.client && $fullLoading()
     try {
-      const routeList = await $globalApi.getMenus()
+      const routeList = await $globalApi.getRoutes()
       if (routeList?.length) {
-        store.dispatch('setRouteList', routeList)
+        $storage.setState('routeList', routeList.map((d: any) => ({
+          ...d,
+          path: d.path ? d.path : d.index,
+          route: `/${d.path ? d.path : d.index}`
+        })))
       } else {
         $message.error('未获取到路由')
       }
 
-      const deptList = await $globalApi.getDeptList()
-      store.dispatch('setDeptList', deptList)
-
-      loading.close()
-    } catch (error) {
-      loading.close()
+      process.client && loading.close()
+    } catch (error: any) {
+      process.client && loading.close()
       throw new Error(error)
     }
   }

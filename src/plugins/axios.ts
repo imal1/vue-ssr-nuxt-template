@@ -1,33 +1,46 @@
+/*
+ * @Author: imali
+ * @Date: 2021-09-03 11:50:05
+ * @LastEditTime: 2021-09-17 15:14:54
+ * @LastEditors: imali
+ * @Description:
+ */
 import { NuxtAxiosInstance } from "@nuxtjs/axios"
 import { AxiosResponse } from 'axios'
 import { defineNuxtPlugin } from '@nuxtjs/composition-api'
 import { toNumber } from "lodash"
 import GlobalApi from '@/api/app'
 
-async function getHost(api: NuxtAxiosInstance, $content: any) {
+async function getHost(api: NuxtAxiosInstance, ctx: any) {
   try {
-    const { host } = await $content('host').fetch()
-
-    api.setBaseURL(`${host}${process.env.PREFIX}`)
+    if (ctx.isStatic) {
+      ctx.$axios.setBaseURL(window.location.origin)
+      const { host } = await ctx.$axios.$get('/host.json?callback=')
+      api.setBaseURL(`${host}${process.env.PREFIX}`)
+    } else {
+      const { host } = await ctx.$axios.$get('host.json')
+      api.setBaseURL('/grade')
+      process.env.TARGET = host
+    }
   } catch (error: any) {
     throw new Error(error)
   }
 }
 
-export default defineNuxtPlugin(async (
-  { $axios, $content, $message, error: nuxtError, isDev }: any,
-  inject: any
-) => {
-  const api = $axios.create()
+export default defineNuxtPlugin(async (ctx: any, inject: any) => {
+  const { $axios, $message, error: nuxtError, isDev } = ctx
+  const api = $axios
 
-  await getHost(api, $content)
+  await getHost(api, ctx)
 
   api.onResponse((res: AxiosResponse) => {
-    const { data, code, msg } = res.data
-    if (toNumber(code) === 200) {
-      res.data = data
-    } else {
-      throw new Error(msg)
+    if (!(res.data instanceof Blob)) {
+      const { data, code, msg } = res.data
+      if (toNumber(code) === 200) {
+        res.data = data
+      } else {
+        throw new Error(msg)
+      }
     }
   })
 
@@ -46,5 +59,4 @@ export default defineNuxtPlugin(async (
   })
 
   inject('globalApi', GlobalApi(api.$request))
-
 })

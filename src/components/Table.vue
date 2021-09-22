@@ -2,10 +2,10 @@
   <div>
     <el-table
       ref="tableRef"
-      :stripe="$_.isNil(attrs.stripe) ? true : attrs.stripe"
-      :border="$_.isNil(attrs.border) ? true : attrs.border"
+      :stripe="isNil(attrs.stripe) ? true : attrs.stripe"
+      :border="isNil(attrs.border) ? true : attrs.border"
       :default-expand-all="
-        $_.isNil(attrs.defaultExpandAll) ? true : attrs.defaultExpandAll
+        isNil(attrs.defaultExpandAll) ? true : attrs.defaultExpandAll
       "
       :data="data"
       v-bind="attrs"
@@ -14,37 +14,51 @@
       <template v-for="(col, index) in columns">
         <el-table-column
           v-if="!col.prop && col.type === 'index'"
-          :key="index"
+          :key="col.prop || index"
           :resizable="false"
           align="center"
           v-bind="col"
         />
         <el-table-column
           v-else-if="col.children"
-          :key="index"
+          :key="col.prop || index"
           :resizable="false"
           align="center"
           v-bind="col"
         >
           <el-table-column
             v-for="(c, i) in col.children"
-            :key="i"
+            :key="c.prop || `${index}${i}`"
             :resizable="false"
             header-align="left"
             v-bind="c"
           >
-            <template #default="{ row, column, $index }">
+            <template v-if="!c.formatter" #default="{ row, column, $index }">
               <slot :name="c.prop" :row="row" :column="column" :index="$index">
-                {{ row[c.prop] }}
+                {{ isNil(row[c.prop]) ? c.empty : row[c.prop] }}
               </slot>
             </template>
           </el-table-column>
         </el-table-column>
-        <el-table-column :key="index" :resizable="false" v-bind="col">
-          <template #default="{ row, column, $index }">
+        <el-table-column
+          :key="col.prop || index"
+          :resizable="false"
+          v-bind="col"
+        >
+          <template v-if="!col.formatter" #default="{ row, column, $index }">
             <slot :name="col.prop" :row="row" :column="column" :index="$index">
-              {{ row[col.prop] }}
+              {{ isNil(row[col.prop]) ? col.empty : row[col.prop] }}
             </slot>
+          </template>
+          <template
+            v-if="!col.label && col.header"
+            #header="{ column, $index }"
+          >
+            <slot
+              :name="`${col.prop}-header`"
+              :column="column"
+              :index="$index"
+            />
           </template>
         </el-table-column>
       </template>
@@ -59,7 +73,7 @@
 </template>
 <script lang="ts">
 import { computed, defineComponent, PropType } from '@nuxtjs/composition-api'
-import { pickBy, omit, keys, isFunction } from 'lodash'
+import { pickBy, omit, keys, isFunction, isNil } from 'lodash'
 
 export interface ITableColumn {
   prop: string
@@ -118,6 +132,7 @@ export default defineComponent({
       events,
       paginEvents,
       paginAttrs,
+      isNil,
     }
   },
 })

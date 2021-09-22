@@ -4,10 +4,9 @@
  * @Author: imali
  * @Date: 2021-07-14 11:21:08
  * @LastEditors: imali
- * @LastEditTime: 2021-07-15 17:49:59
+ * @LastEditTime: 2021-09-18 14:26:50
  */
 import { defineConfig } from 'windicss/helpers'
-import scrollSnapPlugin from 'windicss/plugin/scroll-snap'
 
 export default defineConfig({
   mode: 'jit',
@@ -23,6 +22,8 @@ export default defineConfig({
   },
   variants: {},
   plugins: [
-    scrollSnapPlugin
+    require('windicss/plugin/scroll-snap'),
+    require('@windicss/plugin-scrollbar'),
+    require('windicss/plugin/line-clamp'),
   ],
 })

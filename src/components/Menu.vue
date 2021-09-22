@@ -11,18 +11,18 @@
     <template v-for="(item, key) in menuList">
       <el-submenu
         v-if="item.children && item.children.length > 0"
-        :key="item.index"
-        :index="item.index"
+        :key="key"
+        v-bind="item"
       >
         <template slot="title">
           <i v-if="item.icon" :class="`el-icon-${item.icon}`" />
           <span>{{ item.name }}</span>
         </template>
-        <template v-for="subItem in item.children">
+        <template v-for="(subItem, subKey) in item.children">
           <el-submenu
             v-if="subItem.children && subItem.children.length > 0"
-            :key="subItem.index"
-            :index="subItem.index"
+            :key="`${key}-${subKey}`"
+            v-bind="subItem"
           >
             <template slot="title">
               <i v-if="subItem.icon" :class="`el-icon-${subItem.icon}`" />
@@ -40,7 +40,7 @@
               </el-menu-item>
             </template>
           </el-submenu>
-          <el-menu-item v-else :key="subItem.index" :index="subItem.index">
+          <el-menu-item v-else :key="`${key}-${subKey}`" v-bind="subItem">
             <template slot="title">
               <i v-if="subItem.icon" :class="`el-icon-${subItem.icon}`" />
               <span>{{ subItem.name }}</span>
@@ -48,7 +48,7 @@
           </el-menu-item>
         </template>
       </el-submenu>
-      <el-menu-item v-else :key="item.index" :index="item.index">
+      <el-menu-item v-else :key="key" v-bind="item">
         <template slot="title">
           <i v-if="item.icon" :class="`el-icon-${item.icon}`" />
           <span>{{ item.name }}</span>
