@@ -1,7 +1,7 @@
 <!--
  * @Author: imali
  * @Date: 2021-09-06 15:07:29
- * @LastEditTime: 2021-09-18 15:45:40
+ * @LastEditTime: 2021-09-23 13:56:47
  * @LastEditors: imali
  * @Description:
 -->
@@ -48,7 +48,7 @@ export default {
     return {
       navActive:
         this.routeList && routePath === 'index'
-          ? this.routeList[0].path
+          ? this.routeList[0]?.path
           : routePath,
     }
   },
