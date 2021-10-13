@@ -1,13 +1,16 @@
 <!--
  * @Author: imali
- * @Date: 2021-10-12 16:40:22
- * @LastEditTime: 2021-10-13 11:13:58
+ * @Date: 2021-09-06 15:07:29
+ * @LastEditTime: 2021-09-23 13:56:47
  * @LastEditors: imali
  * @Description:
 -->
 <template>
   <Container direction="vertical">
     <Header class="flex border-b h-60px">
+      <!-- <div class="flex-1">
+        <img src="~/assets/favicon.png" class="max-h-60px" />
+      </div> -->
       <Nav
         class="lg:container lg:mx-auto"
         :list="routeList"
@@ -21,14 +24,17 @@
           :list="menuList"
           :default-openeds="$_.map(menuList, (menu) => menu.index)"
           :default-active="menuActive"
+          :select="doMenuSelect"
           class="h-full"
-          router
         />
       </Aside>
       <Main class="p-0">
         <Nuxt />
       </Main>
     </Container>
+    <!-- <Footer height="30px" class="text-center">
+      <span>@Mandala 曼荼罗</span>
+    </Footer> -->
   </Container>
 </template>
 <script>
@@ -43,54 +49,55 @@ export default {
       navActive:
         this.routeList && routePath === 'index'
           ? this.routeList[0]?.path
-          : routePath
+          : routePath,
     }
   },
   computed: {
     ...mapState({
       routeList: (s) => s.storage.routeList,
-      menuList: (s) => s.storage.menuList
+      menuList: (s) => s.storage.menuList,
     }),
     menuActive() {
-      return this.$route.name?.split('-')[1]
+      return this.$route.query.menu
     },
-    deepDep() {
-      return [this.navActive, this.menuList]
-    }
   },
   watch: {
-    // menuList(newList) {
-    //   if (!this.menuActive && newList?.length && this.navActive !== 'index') {
-    //     let initIndex = ''
-    //     if (newList[0].children?.length) {
-    //       initIndex = newList[0].children[0].index
-    //     } else {
-    //       initIndex = newList[0].index
-    //     }
-    //     console.log(this.$route.path, initIndex)
-    //     // this.$router.replace(`${this.$route.path}/${initIndex}`)
-    //   }
-    // }
-    deepDep(newDeps) {
-      const [newNav, newList] = newDeps[1]
-      if (!this.menuActive && newList?.length && this.navActive !== 'index') {
+    menuList(newList) {
+      if (!this.menuActive && newList?.length) {
         let initIndex = ''
         if (newList[0].children?.length) {
           initIndex = newList[0].children[0].index
         } else {
           initIndex = newList[0].index
         }
-        this.$router.replace(`${newNav}/${initIndex}`)
+        this.$router.replace({
+          query: {
+            menu: initIndex,
+          },
+        })
       }
-    }
+    },
   },
+  watchQuery: ['menu'],
   methods: {
     doNavSelect(index) {
       if (this.navActive !== index) {
         this.$storage.setState('menuList', [])
         this.navActive = index
+        this.$router
+          .replace({
+            query: {
+              menu: undefined,
+            },
+          })
+          .catch(() => {})
       }
-    }
-  }
+    },
+    doMenuSelect(menu) {
+      this.$router
+        .replace({ query: { ...this.$route.query, menu } })
+        .catch(() => {})
+    },
+  },
 }
 </script>

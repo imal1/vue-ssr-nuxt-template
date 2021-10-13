@@ -1,7 +1,7 @@
 <!--
  * @Author: imali
  * @Date: 2021-09-18 14:32:08
- * @LastEditTime: 2021-09-18 15:39:27
+ * @LastEditTime: 2021-10-13 11:18:44
  * @LastEditors: imali
  * @Description:
 -->
@@ -9,13 +9,12 @@
   <div>data_fill</div>
 </template>
 <script>
-import { AccessIndexMenuList } from '@/utils'
-
 export default {
+  middleware: ['menu'],
   watchQuery: ['menu'],
-  async created() {
-    const menuList = await this.$globalApi.getMenus()
-    this.$storage.setState('menuList', AccessIndexMenuList(menuList))
-  },
+  mounted() {
+    const { menuList } = this.$storage.state
+    this.$router.replace(menuList[0].route)
+  }
 }
 </script>
