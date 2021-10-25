@@ -1,7 +1,7 @@
 <!--
  * @Author: imali
  * @Date: 2021-10-12 16:40:22
- * @LastEditTime: 2021-10-13 11:13:58
+ * @LastEditTime: 2021-10-13 13:07:42
  * @LastEditors: imali
  * @Description:
 -->
@@ -59,18 +59,6 @@ export default {
     }
   },
   watch: {
-    // menuList(newList) {
-    //   if (!this.menuActive && newList?.length && this.navActive !== 'index') {
-    //     let initIndex = ''
-    //     if (newList[0].children?.length) {
-    //       initIndex = newList[0].children[0].index
-    //     } else {
-    //       initIndex = newList[0].index
-    //     }
-    //     console.log(this.$route.path, initIndex)
-    //     // this.$router.replace(`${this.$route.path}/${initIndex}`)
-    //   }
-    // }
     deepDep(newDeps) {
       const [newNav, newList] = newDeps[1]
       if (!this.menuActive && newList?.length && this.navActive !== 'index') {

@@ -41,6 +41,7 @@
           </el-table-column>
         </el-table-column>
         <el-table-column
+          v-else
           :key="col.prop || index"
           :resizable="false"
           v-bind="col"
